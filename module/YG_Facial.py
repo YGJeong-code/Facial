@@ -18,7 +18,7 @@ class YG_Facial(object):
         if cmds.window(self.myWin, ex=True):
             cmds.deleteUI(self.myWin)
 
-        self.myWin = cmds.window(self.myWin, t=self.myWin+'_v0.1', sizeable=True, resizeToFitChildren=True)
+        self.myWin = cmds.window(self.myWin, t=self.myWin+'_v1.0', sizeable=True, resizeToFitChildren=True)
         self.myColor = {'red':[0.6,0,0],'orange':[0.6, 0.2, 0],'yellow':[0.7, 0.6, 0.1],'green':[0.4, 0.6, 0.1]}
 
         ## up axis
@@ -137,7 +137,6 @@ class YG_Facial(object):
     ############################################################################################################################################################################################################################
     def makeARKitTargetBtn(self, *args):
         ARKit.duplicateLODGroup()
-        ARKit.importUI()
 
     def makePose(self, target):
         ARKit.makePose(target)

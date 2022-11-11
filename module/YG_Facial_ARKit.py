@@ -1,4 +1,5 @@
 import maya.cmds as cmds
+import maya.mel as mel
 import Facial.module.YG_Facial_ARKitDict as ARKitDict
 reload(ARKitDict)
 
@@ -276,23 +277,50 @@ def duplicateLODGroup():
     for i in myList:
         cmds.setAttr('%s.%s' % ('Default', i), keyable=True, lock=False)
 
-    # connect blendShape 2 ui
+    cmds.setAttr ("Default.tx", -27)
 
-def uiCon(con):
+    # connect blendShape 2 ui
+    importUI()
+    connectBlendShape2UI()
+
+def newCon(con):
     cmds.ls(con)
     for i in cmds.ls(con):
         if 'head_grp' not in cmds.listRelatives(i, f=True)[0]:
             return i
 
+def oldCon(con):
+    cmds.ls(con)
+    for i in cmds.ls(con):
+        if 'head_grp' in cmds.listRelatives(i, f=True)[0]:
+            return i
+
+def defaultPoseNew():
+    for item in ARKitDict.myNewDict:
+        for con in ARKitDict.myNewDict[item]:
+            for axis in ARKitDict.myNewDict[item][con]:
+                cmds.setAttr(newCon(con)+'.'+axis, 0)
+
 def defaultPose():
     for item in ARKitDict.myDict:
         for con in ARKitDict.myDict[item]:
             for axis in ARKitDict.myDict[item][con]:
-                if len(cmds.ls(con))>1:
-                    for i in cmds.ls(con):
-                        cmds.setAttr(i+'.'+axis, 0)
+                if len(cmds.ls('CTRL_C_eye'))>1:
+                    defaultPoseNew()
+                    cmds.setAttr(oldCon(con)+'.'+axis, 0)
                 else:
                     cmds.setAttr(con+'.'+axis, 0)
+
+def makePoseNew(target):
+    if target == 'Default':
+        defaultPoseNew()
+    else:
+        defaultPoseNew()
+
+        for con in ARKitDict.myNewDict[target]:
+            for axis in ARKitDict.myNewDict[target][con]:
+                value = ARKitDict.myNewDict[target][con][axis]
+                cmds.setAttr(newCon(con)+'.'+axis, value)
 
 def makePose(target):
     if target == 'Default':
@@ -304,9 +332,9 @@ def makePose(target):
             for axis in ARKitDict.myDict[target][con]:
                 value = ARKitDict.myDict[target][con][axis]
 
-                if len(cmds.ls(con))>1:
-                    for i in cmds.ls(con):
-                        cmds.setAttr(i+'.'+axis, value)
+                if len(cmds.ls('CTRL_C_eye'))>1:
+                    makePoseNew(target)
+                    cmds.setAttr(oldCon(con)+'.'+axis, value)
                 else:
                     cmds.setAttr(con+'.'+axis, value)
 
@@ -317,11 +345,108 @@ def importUI():
 
     cmds.file(tempPath, i=True)
 
-def uiCon(con):
-    cmds.ls(con)
-    for i in cmds.ls(con):
-        if 'head_grp' not in cmds.listRelatives(i, f=True)[0]:
-            return i
+def plusConnect(con, axis, target):
+    if bool(cmds.ls(target+'_clamp')) == False:
+        myClamp = cmds.createNode('clamp', n=target+'_clamp')
+        cmds.setAttr(myClamp+'.maxR', 1)
+
+        cmds.connectAttr(newCon(con)+'.'+axis, myClamp+'.inputR', f=True)
+        cmds.connectAttr(myClamp+'.outputR', 'BS_ARKit.'+target, f=True)
+
+def minusConnect(con, axis, target):
+    if bool(cmds.ls(target+'_clamp')) == False:
+        myMult = cmds.createNode('multiplyDivide', n=target+'_mult')
+        cmds.setAttr(myMult+'.input2X', -1)
+
+        myClamp = cmds.createNode('clamp', n=target+'_clamp')
+        cmds.setAttr(myClamp+'.maxR', 1)
+
+        cmds.connectAttr(newCon(con)+'.'+axis, myMult+'.input1X', f=True)
+        cmds.connectAttr(myMult+'.outputX', myClamp+'.inputR', f=True)
+        cmds.connectAttr(myClamp+'.outputR', 'BS_ARKit.'+target, f=True)
+
+def multiConnect(conA, conB, axis, target, value):
+    if bool(cmds.ls(target+'_clamp')) == False:
+        myMultA = cmds.createNode('multiplyDivide', n=target+'_A_mult')
+        cmds.setAttr(myMultA+'.input2X', value)
+
+        myMultB = cmds.createNode('multiplyDivide', n=target+'_B_mult')
+        cmds.setAttr(myMultB+'.input2X', value)
+
+        myClampA = cmds.createNode('clamp', n=target+'_A_clamp')
+        cmds.setAttr(myClampA+'.maxR', 1)
+
+        myClampB = cmds.createNode('clamp', n=target+'_B_clamp')
+        cmds.setAttr(myClampB+'.maxR', 1)
+
+        myPlus = cmds.createNode('plusMinusAverage', n=target+'_plus')
+
+        cmds.connectAttr(newCon(conA)+'.'+axis, myMultA+'.input1X', f=True)
+        cmds.connectAttr(myMultA+'.outputX', myClampA+'.inputR', f=True)
+        cmds.connectAttr(myClampA+'.outputR', myPlus+'.input1D[0]', f=True)
+
+        cmds.connectAttr(newCon(conB)+'.'+axis, myMultB+'.input1X', f=True)
+        cmds.connectAttr(myMultB+'.outputX', myClampB+'.inputR', f=True)
+        cmds.connectAttr(myClampB+'.outputR', myPlus+'.input1D[1]', f=True)
+
+        cmds.connectAttr(myPlus+'.output1D', 'BS_ARKit.'+target, f=True)
 
 def connectBlendShape2UI():
-    cmds.connectAttr(uiCon('CTRL_L_eye_blink')+'.ty', 'BS_ARKit.EyeBlinkLeft', f=True)
+    plusConnect('CTRL_L_eye_blink', 'ty', 'EyeBlinkLeft')
+    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookDownLeft', -1)
+    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookInLeft', -1)
+    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookOutLeft', 1)
+    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookUpLeft', 1)
+    plusConnect('CTRL_L_eye_squintInner', 'ty', 'EyeSquintLeft')
+    minusConnect('CTRL_L_eye_blink', 'ty', 'EyeWideLeft')
+
+    plusConnect('CTRL_R_eye_blink', 'ty', 'EyeBlinkRight')
+    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookDownRight', -1)
+    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookInRight', 1)
+    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookOutRight', -1)
+    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookUpRight', 1)
+    plusConnect('CTRL_R_eye_squintInner', 'ty', 'EyeSquintRight')
+    minusConnect('CTRL_R_eye_blink', 'ty', 'EyeWideRight')
+
+    minusConnect('CTRL_C_jaw_fwdBack', 'ty', 'JawForward')
+    minusConnect('CTRL_C_jaw', 'tx', 'JawLeft')
+    plusConnect('CTRL_C_jaw', 'tx', 'JawRight')
+    plusConnect('CTRL_C_jaw', 'ty', 'JawOpen')
+
+    plusConnect('CTRL_C_mouth_funnelD', 'ty', 'MouthFunnel')
+    plusConnect('CTRL_C_mouth_purseD', 'ty', 'MouthPucker')
+
+    plusConnect('CTRL_C_mouth', 'ty', 'MouthLeft')
+    minusConnect('CTRL_C_mouth', 'ty', 'MouthRight')
+    plusConnect('CTRL_L_mouth_cornerPull', 'ty', 'MouthSmileLeft')
+    plusConnect('CTRL_R_mouth_cornerPull', 'ty', 'MouthSmileRight')
+    plusConnect('CTRL_L_mouth_cornerDepress', 'ty', 'MouthFrownLeft')
+    plusConnect('CTRL_R_mouth_cornerDepress', 'ty', 'MouthFrownRight')
+    plusConnect('CTRL_L_mouth_dimple', 'ty', 'MouthDimpleLeft')
+    plusConnect('CTRL_R_mouth_dimple', 'ty', 'MouthDimpleRight')
+    plusConnect('CTRL_L_mouth_stretch', 'ty', 'MouthStretchLeft')
+    plusConnect('CTRL_R_mouth_stretch', 'ty', 'MouthStretchRight')
+    plusConnect('CTRL_C_mouth_lipsRollD', 'ty', 'MouthRollLower')
+    plusConnect('CTRL_C_mouth_lipsRollU', 'ty', 'MouthRollUpper')
+    plusConnect('CTRL_C_jaw_ChinRaiseD', 'ty', 'MouthShrugLower')
+    plusConnect('CTRL_C_jaw_ChinRaiseU', 'ty', 'MouthShrugUpper')
+    plusConnect('CTRL_L_mouth_press', 'ty', 'MouthPressLeft')
+    plusConnect('CTRL_R_mouth_press', 'ty', 'MouthPressRight')
+    plusConnect('CTRL_L_mouth_lowerLipDepress', 'ty', 'MouthLowerDownLeft')
+    plusConnect('CTRL_R_mouth_lowerLipDepress', 'ty', 'MouthLowerDownRight')
+    plusConnect('CTRL_L_mouth_upperLipRaise', 'ty', 'MouthUpperUpLeft')
+    plusConnect('CTRL_R_mouth_upperLipRaise', 'ty', 'MouthUpperUpRight')
+    plusConnect('CTRL_C_mouth_close', 'ty', 'MouthClose')
+
+    plusConnect('CTRL_L_brow_down', 'ty', 'BrowDownLeft')
+    plusConnect('CTRL_R_brow_down', 'ty', 'BrowDownRight')
+    plusConnect('CTRL_L_brow_raiseOut', 'ty', 'BrowOuterUpLeft')
+    plusConnect('CTRL_R_brow_raiseOut', 'ty', 'BrowOuterUpRight')
+    plusConnect('CTRL_C_brow_raiseIn', 'ty', 'BrowInnerUp')
+
+    plusConnect('CTRL_L_eye_cheekRaise', 'ty', 'CheekSquintLeft')
+    plusConnect('CTRL_R_eye_cheekRaise', 'ty', 'CheekSquintRight')
+    plusConnect('CTRL_C_mouth_suckBlow', 'ty', 'CheekPuff')
+
+    plusConnect('CTRL_L_nose', 'ty', 'NoseSneerLeft')
+    plusConnect('CTRL_R_nose', 'ty', 'NoseSneerRight')
