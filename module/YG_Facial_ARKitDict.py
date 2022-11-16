@@ -1,3 +1,6 @@
+myTargetGrp=[]
+myMesh=''
+
 myDict = {'EyeBlinkLeft':{'CTRL_L_eye_blink':{'ty':1}},
 'EyeLookDownLeft':{'CTRL_L_eye':{'ty':-1}},
 'EyeLookInLeft':{'CTRL_L_eye':{'tx':-1}},
@@ -51,6 +54,14 @@ myDict = {'EyeBlinkLeft':{'CTRL_L_eye_blink':{'ty':1}},
 'NoseSneerLeft':{'CTRL_L_nose':{'ty':1}},
 'NoseSneerRight':{'CTRL_R_nose':{'ty':1}},
 'MouthClose':{'CTRL_C_jaw':{'ty':1},'CTRL_L_mouth_lipsTogetherU':{'ty':1},'CTRL_R_mouth_lipsTogetherU':{'ty':1},'CTRL_L_mouth_lipsTogetherD':{'ty':1},'CTRL_R_mouth_lipsTogetherD':{'ty':1}},
+'EyeBlinkLookDownLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'ty':-1}},
+'EyeBlinkLookInLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'tx':-1}},
+'EyeBlinkLookOutLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'tx':1}},
+'EyeBlinkLookUpLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'ty':1}},
+'EyeBlinkLookDownRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'ty':-1}},
+'EyeBlinkLookInRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'tx':1}},
+'EyeBlinkLookOutRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'tx':-1}},
+'EyeBlinkLookUpRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'ty':1}}
 }
 
 myNewDict = {'EyeBlinkLeft':{'CTRL_L_eye_blink':{'ty':1}},

@@ -228,46 +228,63 @@ def makeKey():
     fwdBackKey(51, 'CTRL_R_mouth_lipsTogetherD','ty', 1)
 
 # new
-def duplicateLODGroup():
-    # lod0
-    myList = cmds.listRelatives('head_lod0_grp', c=True)
-    myMesh = cmds.polyUniteSkinned( myList, ch=0 )
-    myMesh = myMesh[0]
-
-    # target group
-    myGrp = cmds.group(em=True, n='target_grp')
-    cmds.hide(myGrp)
-
-    # make pose & duplicate
-    for target in ARKitDict.myList:
-        makePose(target)
-        cmds.duplicate(myMesh, n=target, rc=True)
-
-        if target != 'Default':
-            cmds.parent(target, myGrp)
-
+def makeCorrectiveShape(target, pose):
     # mouth close
     makePose('Default')
-    myHead = cmds.duplicate(myMesh)
+    myHead = cmds.duplicate(ARKitDict.myMesh)
 
-    makePose('MouthClose')
-    target1 = cmds.duplicate(myMesh)
+    makePose(target)
+    target1 = cmds.duplicate(ARKitDict.myMesh)
 
-    makePose('JawOpen')
-    target2 = cmds.duplicate(myMesh)
+    makePose(pose)
+    target2 = cmds.duplicate(ARKitDict.myMesh)
 
     myBlend = cmds.blendShape( target1, target2, myHead )
     cmds.setAttr(myBlend[0]+'.'+target1[0], 1)
     cmds.setAttr(myBlend[0]+'.'+target2[0], -1)
 
-    myTarget = cmds.duplicate(myHead, n='MouthClose', rc=True)
-    cmds.parent(myTarget[0], myGrp)
+    myTarget = cmds.duplicate(myHead, n=target, rc=True)
+    cmds.parent(myTarget[0], ARKitDict.myTargetGrp)
     cmds.delete(myHead,target1,target2)
 
+# makeCorrectiveShape('MouthClose', 'JawOpen')
+
+def duplicateLODGroup():
+    # lod0
+    myList = cmds.listRelatives('head_lod0_grp', c=True)
+    myMesh = cmds.polyUniteSkinned( myList, ch=0 )
+    ARKitDict.myMesh = myMesh[0]
+
+    # target group
+    ARKitDict.myTargetGrp = cmds.group(em=True, n='target_grp')
+    cmds.hide(ARKitDict.myTargetGrp)
+
+    # make pose & duplicate
+    for target in ARKitDict.myList:
+        makePose(target)
+        cmds.duplicate(ARKitDict.myMesh, n=target, rc=True)
+
+        if target != 'Default':
+            cmds.parent(target, ARKitDict.myTargetGrp)
+
+    # mouth close
+    makeCorrectiveShape('MouthClose', 'JawOpen')
+
+    # eye
+    makeCorrectiveShape('EyeBlinkLookDownLeft', 'EyeLookDownLeft')
+    makeCorrectiveShape('EyeBlinkLookInLeft', 'EyeLookInLeft')
+    makeCorrectiveShape('EyeBlinkLookOutLeft', 'EyeLookOutLeft')
+    makeCorrectiveShape('EyeBlinkLookUpLeft', 'EyeLookUpLeft')
+
+    makeCorrectiveShape('EyeBlinkLookDownRight', 'EyeLookDownRight')
+    makeCorrectiveShape('EyeBlinkLookInRight', 'EyeLookInRight')
+    makeCorrectiveShape('EyeBlinkLookOutRight', 'EyeLookOutRight')
+    makeCorrectiveShape('EyeBlinkLookUpRight', 'EyeLookUpRight')
+
     # blendShape
-    myTargetList = cmds.listRelatives(myGrp, c=True)
+    myTargetList = cmds.listRelatives(ARKitDict.myTargetGrp, c=True)
     cmds.blendShape( myTargetList, 'Default', n='BS_ARKit' )
-    cmds.delete(myGrp)
+    cmds.delete(ARKitDict.myTargetGrp)
     # cmds.hide(myMesh)
 
     makePose('Default')
@@ -281,7 +298,7 @@ def duplicateLODGroup():
 
     # connect blendShape 2 ui
     importUI()
-    connectBlendShape2UI()
+    # connectBlendShape2UI()
 
 def newCon(con):
     cmds.ls(con)
@@ -367,86 +384,189 @@ def minusConnect(con, axis, target):
 
 def multiConnect(conA, conB, axis, target, value):
     if bool(cmds.ls(target+'_clamp')) == False:
+        # eye axis
         myMultA = cmds.createNode('multiplyDivide', n=target+'_A_mult')
         cmds.setAttr(myMultA+'.input2X', value)
 
         myMultB = cmds.createNode('multiplyDivide', n=target+'_B_mult')
         cmds.setAttr(myMultB+'.input2X', value)
 
-        myClampA = cmds.createNode('clamp', n=target+'_A_clamp')
-        cmds.setAttr(myClampA+'.maxR', 1)
-
-        myClampB = cmds.createNode('clamp', n=target+'_B_clamp')
-        cmds.setAttr(myClampB+'.maxR', 1)
-
         myPlus = cmds.createNode('plusMinusAverage', n=target+'_plus')
 
+        myClamp = cmds.createNode('clamp', n=target+'_clamp')
+        cmds.setAttr(myClamp+'.maxR', 1)
+
         cmds.connectAttr(newCon(conA)+'.'+axis, myMultA+'.input1X', f=True)
-        cmds.connectAttr(myMultA+'.outputX', myClampA+'.inputR', f=True)
-        cmds.connectAttr(myClampA+'.outputR', myPlus+'.input1D[0]', f=True)
+        cmds.connectAttr(myMultA+'.outputX', myPlus+'.input1D[0]', f=True)
 
         cmds.connectAttr(newCon(conB)+'.'+axis, myMultB+'.input1X', f=True)
-        cmds.connectAttr(myMultB+'.outputX', myClampB+'.inputR', f=True)
-        cmds.connectAttr(myClampB+'.outputR', myPlus+'.input1D[1]', f=True)
+        cmds.connectAttr(myMultB+'.outputX', myPlus+'.input1D[1]', f=True)
 
-        cmds.connectAttr(myPlus+'.output1D', 'BS_ARKit.'+target, f=True)
+        cmds.connectAttr(myPlus+'.output1D', myClamp+'.inputR', f=True)
+        cmds.connectAttr(myClamp+'.outputR', 'BS_ARKit.'+target, f=True)
+
+def connectExp(con, axis, conExp, target):
+    cmds.connectAttr ( newCon(con)+'.'+axis, conExp+'.input', f=True )
+
+    myExpTarget = newCon('CTRL_expressions') + '.' + conExp.replace( 'CTRL_expressions_', '' )
+    cmds.connectAttr ( conExp+'.output', myExpTarget, f=True )
+    cmds.connectAttr ( myExpTarget, 'BS_ARKit.'+target, f=True )
+
+def connectEye():
+    cmds.connectAttr ( newCon('CTRL_L_eye')+'.tx', 'LOC_L_eyeUIDriver_rotateY.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_L_eye')+'.ty', 'LOC_L_eyeUIDriver_rotateX.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_R_eye')+'.tx', 'LOC_R_eyeUIDriver_rotateY.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_R_eye')+'.ty', 'LOC_R_eyeUIDriver_rotateX.input', f=True )
+
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.tx', 'animCurveUA3.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.tx', 'animCurveUA1.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.ty', 'animCurveUA2.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.ty', 'animCurveUA4.input', f=True )
+
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookLeftL.output', newCon('CTRL_expressions')+'.eyeLookLeftL', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookLeftL', 'BS_ARKit.EyeLookOutLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookLeftR.output', newCon('CTRL_expressions')+'.eyeLookLeftR', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookLeftR', 'BS_ARKit.EyeLookInRight', f=True )
+
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookRightL.output', newCon('CTRL_expressions')+'.eyeLookRightL', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookRightL', 'BS_ARKit.EyeLookInLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookRightR.output', newCon('CTRL_expressions')+'.eyeLookRightR', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookRightR', 'BS_ARKit.EyeLookOutRight', f=True )
+
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookUpL.output', newCon('CTRL_expressions')+'.eyeLookUpL', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookUpL', 'BS_ARKit.EyeLookUpLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookUpR.output', newCon('CTRL_expressions')+'.eyeLookUpR', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookUpR', 'BS_ARKit.EyeLookUpRight', f=True )
+
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookDownL.output', newCon('CTRL_expressions')+'.eyeLookDownL', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookDownL', 'BS_ARKit.EyeLookDownLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookDownR.output', newCon('CTRL_expressions')+'.eyeLookDownR', f=True )
+    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookDownR', 'BS_ARKit.EyeLookDownRight', f=True )
+
+def eyeBlinkConnect(target, exp, blink):
+    myCond = cmds.createNode('condition', n=target+'_cond')
+    cmds.setAttr(myCond+'.operation', 2)
+
+    myMult = cmds.createNode('multiplyDivide', n=target+'_mult')
+
+    cmds.connectAttr(newCon('CTRL_expressions')+'.'+exp, myCond+'.colorIfTrueR', f=True)
+    cmds.connectAttr(newCon('CTRL_expressions')+'.'+blink, myCond+'.firstTerm', f=True)
+    cmds.connectAttr (myCond+'.outColorR', myMult+'.input1X', f=True)
+    cmds.connectAttr (newCon('CTRL_expressions')+'.'+blink, myMult+'.input2X', f=True)
+    cmds.connectAttr (myMult+'.outputX', 'BS_ARKit.'+target, f=True)
+
+def eyeConnect():
+    # minus eye blink
+    myBlinkPlus = cmds.createNode('plusMinusAverage', n='EyeBlinkLeft_plus')
+    cmds.setAttr(myBlinkPlus+'.operation', 2)
+
+    cmds.connectAttr(newCon('CTRL_expressions')+'.eyeBlinkL', myBlinkPlus+'.input1D[0]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookDownLeft', myBlinkPlus+'.input1D[1]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookInLeft', myBlinkPlus+'.input1D[2]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookOutLeft', myBlinkPlus+'.input1D[3]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookUpLeft', myBlinkPlus+'.input1D[4]', f=True)
+    cmds.connectAttr (myBlinkPlus+'.output1D', 'BS_ARKit.EyeBlinkLeft', f=True)
+
+    myBlinkPlus = cmds.createNode('plusMinusAverage', n='EyeBlinkRight_plus')
+    cmds.setAttr(myBlinkPlus+'.operation', 2)
+
+    cmds.connectAttr(newCon('CTRL_expressions')+'.eyeBlinkR', myBlinkPlus+'.input1D[0]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookDownRight', myBlinkPlus+'.input1D[1]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookInRight', myBlinkPlus+'.input1D[2]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookOutRight', myBlinkPlus+'.input1D[3]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkLookUpRight', myBlinkPlus+'.input1D[4]', f=True)
+    cmds.connectAttr (myBlinkPlus+'.output1D', 'BS_ARKit.EyeBlinkRight', f=True)
+
+    # connect
+    eyeBlinkConnect('EyeBlinkLookDownLeft', 'eyeLookDownL', 'eyeBlinkL')
+    eyeBlinkConnect('EyeBlinkLookInLeft', 'eyeLookRightL', 'eyeBlinkL')
+    eyeBlinkConnect('EyeBlinkLookOutLeft', 'eyeLookLeftL', 'eyeBlinkL')
+    eyeBlinkConnect('EyeBlinkLookUpLeft', 'eyeLookUpL', 'eyeBlinkL')
+
+    eyeBlinkConnect('EyeBlinkLookDownRight', 'eyeLookDownR', 'eyeBlinkR')
+    eyeBlinkConnect('EyeBlinkLookInRight', 'eyeLookLeftR', 'eyeBlinkR')
+    eyeBlinkConnect('EyeBlinkLookOutRight', 'eyeLookRightR', 'eyeBlinkR')
+    eyeBlinkConnect('EyeBlinkLookUpRight', 'eyeLookUpR', 'eyeBlinkR')
 
 def connectBlendShape2UI():
-    plusConnect('CTRL_L_eye_blink', 'ty', 'EyeBlinkLeft')
-    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookDownLeft', -1)
-    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookInLeft', -1)
-    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookOutLeft', 1)
-    multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookUpLeft', 1)
-    plusConnect('CTRL_L_eye_squintInner', 'ty', 'EyeSquintLeft')
-    minusConnect('CTRL_L_eye_blink', 'ty', 'EyeWideLeft')
+    connectExp('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkL', 'EyeBlinkLeft')
+    connectExp('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeWidenL', 'EyeWideLeft')
+    connectExp('CTRL_L_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerL', 'EyeSquintLeft')
+    connectExp('CTRL_L_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseL', 'CheekSquintLeft')
 
-    plusConnect('CTRL_R_eye_blink', 'ty', 'EyeBlinkRight')
-    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookDownRight', -1)
-    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookInRight', 1)
-    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookOutRight', -1)
-    multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookUpRight', 1)
-    plusConnect('CTRL_R_eye_squintInner', 'ty', 'EyeSquintRight')
-    minusConnect('CTRL_R_eye_blink', 'ty', 'EyeWideRight')
+    connectExp('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkR', 'EyeBlinkRight')
+    connectExp('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeWidenR', 'EyeWideRight')
+    connectExp('CTRL_R_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerR', 'EyeSquintRight')
+    connectExp('CTRL_R_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseR', 'CheekSquintRight')
 
-    minusConnect('CTRL_C_jaw_fwdBack', 'ty', 'JawForward')
-    minusConnect('CTRL_C_jaw', 'tx', 'JawLeft')
-    plusConnect('CTRL_C_jaw', 'tx', 'JawRight')
-    plusConnect('CTRL_C_jaw', 'ty', 'JawOpen')
+    connectEye()
+    # eyeConnect()
 
-    plusConnect('CTRL_C_mouth_funnelD', 'ty', 'MouthFunnel')
-    plusConnect('CTRL_C_mouth_purseD', 'ty', 'MouthPucker')
-
-    plusConnect('CTRL_C_mouth', 'ty', 'MouthLeft')
-    minusConnect('CTRL_C_mouth', 'ty', 'MouthRight')
-    plusConnect('CTRL_L_mouth_cornerPull', 'ty', 'MouthSmileLeft')
-    plusConnect('CTRL_R_mouth_cornerPull', 'ty', 'MouthSmileRight')
-    plusConnect('CTRL_L_mouth_cornerDepress', 'ty', 'MouthFrownLeft')
-    plusConnect('CTRL_R_mouth_cornerDepress', 'ty', 'MouthFrownRight')
-    plusConnect('CTRL_L_mouth_dimple', 'ty', 'MouthDimpleLeft')
-    plusConnect('CTRL_R_mouth_dimple', 'ty', 'MouthDimpleRight')
-    plusConnect('CTRL_L_mouth_stretch', 'ty', 'MouthStretchLeft')
-    plusConnect('CTRL_R_mouth_stretch', 'ty', 'MouthStretchRight')
-    plusConnect('CTRL_C_mouth_lipsRollD', 'ty', 'MouthRollLower')
-    plusConnect('CTRL_C_mouth_lipsRollU', 'ty', 'MouthRollUpper')
-    plusConnect('CTRL_C_jaw_ChinRaiseD', 'ty', 'MouthShrugLower')
-    plusConnect('CTRL_C_jaw_ChinRaiseU', 'ty', 'MouthShrugUpper')
-    plusConnect('CTRL_L_mouth_press', 'ty', 'MouthPressLeft')
-    plusConnect('CTRL_R_mouth_press', 'ty', 'MouthPressRight')
-    plusConnect('CTRL_L_mouth_lowerLipDepress', 'ty', 'MouthLowerDownLeft')
-    plusConnect('CTRL_R_mouth_lowerLipDepress', 'ty', 'MouthLowerDownRight')
-    plusConnect('CTRL_L_mouth_upperLipRaise', 'ty', 'MouthUpperUpLeft')
-    plusConnect('CTRL_R_mouth_upperLipRaise', 'ty', 'MouthUpperUpRight')
-    plusConnect('CTRL_C_mouth_close', 'ty', 'MouthClose')
-
-    plusConnect('CTRL_L_brow_down', 'ty', 'BrowDownLeft')
-    plusConnect('CTRL_R_brow_down', 'ty', 'BrowDownRight')
-    plusConnect('CTRL_L_brow_raiseOut', 'ty', 'BrowOuterUpLeft')
-    plusConnect('CTRL_R_brow_raiseOut', 'ty', 'BrowOuterUpRight')
-    plusConnect('CTRL_C_brow_raiseIn', 'ty', 'BrowInnerUp')
-
-    plusConnect('CTRL_L_eye_cheekRaise', 'ty', 'CheekSquintLeft')
-    plusConnect('CTRL_R_eye_cheekRaise', 'ty', 'CheekSquintRight')
-    plusConnect('CTRL_C_mouth_suckBlow', 'ty', 'CheekPuff')
-
-    plusConnect('CTRL_L_nose', 'ty', 'NoseSneerLeft')
-    plusConnect('CTRL_R_nose', 'ty', 'NoseSneerRight')
+    # plusConnect('CTRL_L_eye_blink', 'ty', 'EyeBlinkLeft')
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookDownLeft', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookInLeft', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookOutLeft', 1)
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookUpLeft', 1)
+    # plusConnect('CTRL_L_eye_squintInner', 'ty', 'EyeSquintLeft')
+    # minusConnect('CTRL_L_eye_blink', 'ty', 'EyeWideLeft')
+    #
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeBlinkLookDownLeft', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeBlinkLookInLeft', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeBlinkLookOutLeft', 1)
+    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeBlinkLookUpLeft', 1)
+    #
+    # plusConnect('CTRL_R_eye_blink', 'ty', 'EyeBlinkRight')
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookDownRight', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookInRight', 1)
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookOutRight', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookUpRight', 1)
+    # plusConnect('CTRL_R_eye_squintInner', 'ty', 'EyeSquintRight')
+    # minusConnect('CTRL_R_eye_blink', 'ty', 'EyeWideRight')
+    #
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeBlinkLookDownRight', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeBlinkLookInRight', 1)
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeBlinkLookOutRight', -1)
+    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeBlinkLookUpRight', 1)
+    #
+    # minusConnect('CTRL_C_jaw_fwdBack', 'ty', 'JawForward')
+    # minusConnect('CTRL_C_jaw', 'tx', 'JawLeft')
+    # plusConnect('CTRL_C_jaw', 'tx', 'JawRight')
+    # plusConnect('CTRL_C_jaw', 'ty', 'JawOpen')
+    #
+    # plusConnect('CTRL_C_mouth_funnelD', 'ty', 'MouthFunnel')
+    # plusConnect('CTRL_C_mouth_purseD', 'ty', 'MouthPucker')
+    #
+    # plusConnect('CTRL_C_mouth', 'ty', 'MouthLeft')
+    # minusConnect('CTRL_C_mouth', 'ty', 'MouthRight')
+    # plusConnect('CTRL_L_mouth_cornerPull', 'ty', 'MouthSmileLeft')
+    # plusConnect('CTRL_R_mouth_cornerPull', 'ty', 'MouthSmileRight')
+    # plusConnect('CTRL_L_mouth_cornerDepress', 'ty', 'MouthFrownLeft')
+    # plusConnect('CTRL_R_mouth_cornerDepress', 'ty', 'MouthFrownRight')
+    # plusConnect('CTRL_L_mouth_dimple', 'ty', 'MouthDimpleLeft')
+    # plusConnect('CTRL_R_mouth_dimple', 'ty', 'MouthDimpleRight')
+    # plusConnect('CTRL_L_mouth_stretch', 'ty', 'MouthStretchLeft')
+    # plusConnect('CTRL_R_mouth_stretch', 'ty', 'MouthStretchRight')
+    # plusConnect('CTRL_C_mouth_lipsRollD', 'ty', 'MouthRollLower')
+    # plusConnect('CTRL_C_mouth_lipsRollU', 'ty', 'MouthRollUpper')
+    # plusConnect('CTRL_C_jaw_ChinRaiseD', 'ty', 'MouthShrugLower')
+    # plusConnect('CTRL_C_jaw_ChinRaiseU', 'ty', 'MouthShrugUpper')
+    # plusConnect('CTRL_L_mouth_press', 'ty', 'MouthPressLeft')
+    # plusConnect('CTRL_R_mouth_press', 'ty', 'MouthPressRight')
+    # plusConnect('CTRL_L_mouth_lowerLipDepress', 'ty', 'MouthLowerDownLeft')
+    # plusConnect('CTRL_R_mouth_lowerLipDepress', 'ty', 'MouthLowerDownRight')
+    # plusConnect('CTRL_L_mouth_upperLipRaise', 'ty', 'MouthUpperUpLeft')
+    # plusConnect('CTRL_R_mouth_upperLipRaise', 'ty', 'MouthUpperUpRight')
+    # plusConnect('CTRL_C_mouth_close', 'ty', 'MouthClose')
+    #
+    # plusConnect('CTRL_L_brow_down', 'ty', 'BrowDownLeft')
+    # plusConnect('CTRL_R_brow_down', 'ty', 'BrowDownRight')
+    # plusConnect('CTRL_L_brow_raiseOut', 'ty', 'BrowOuterUpLeft')
+    # plusConnect('CTRL_R_brow_raiseOut', 'ty', 'BrowOuterUpRight')
+    # plusConnect('CTRL_C_brow_raiseIn', 'ty', 'BrowInnerUp')
+    #
+    # plusConnect('CTRL_L_eye_cheekRaise', 'ty', 'CheekSquintLeft')
+    # plusConnect('CTRL_R_eye_cheekRaise', 'ty', 'CheekSquintRight')
+    # plusConnect('CTRL_C_mouth_suckBlow', 'ty', 'CheekPuff')
+    #
+    # plusConnect('CTRL_L_nose', 'ty', 'NoseSneerLeft')
+    # plusConnect('CTRL_R_nose', 'ty', 'NoseSneerRight')
