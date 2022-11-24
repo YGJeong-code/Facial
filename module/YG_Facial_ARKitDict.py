@@ -58,10 +58,14 @@ myDict = {'EyeBlinkLeft':{'CTRL_L_eye_blink':{'ty':1}},
 'EyeBlinkLookInLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'tx':-1}},
 'EyeBlinkLookOutLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'tx':1}},
 'EyeBlinkLookUpLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'ty':1}},
+'EyeBlinkSquintLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye_squintInner':{'ty':1}},
+'EyeBlinkCheekSquintLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye_cheekRaise':{'ty':1}},
 'EyeBlinkLookDownRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'ty':-1}},
 'EyeBlinkLookInRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'tx':1}},
 'EyeBlinkLookOutRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'tx':-1}},
-'EyeBlinkLookUpRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'ty':1}}
+'EyeBlinkLookUpRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'ty':1}},
+'EyeBlinkSquintRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye_squintInner':{'ty':1}},
+'EyeBlinkCheekSquintRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye_cheekRaise':{'ty':1}},
 }
 
 myNewDict = {'EyeBlinkLeft':{'CTRL_L_eye_blink':{'ty':1}},

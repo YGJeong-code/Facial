@@ -3,231 +3,6 @@ import maya.mel as mel
 import Facial.module.YG_Facial_ARKitDict as ARKitDict
 reload(ARKitDict)
 
-# old
-def fwdBackKey(myTime, myCon, myPos, myValue):
-    cmds.currentTime( myTime-1, edit=True )
-    cmds.setKeyframe(myCon, attribute=myPos, v=0)
-
-    cmds.currentTime( myTime, edit=True )
-    cmds.setKeyframe(myCon, attribute=myPos, v=myValue)
-
-    cmds.currentTime( myTime+1, edit=True )
-    cmds.setKeyframe(myCon, attribute=myPos, v=0)
-
-def fwdKey(myTime, myCon, myPos, myValue):
-    cmds.currentTime( myTime-1, edit=True )
-    cmds.setKeyframe(myCon, attribute=myPos, v=0)
-
-    cmds.currentTime( myTime, edit=True )
-    cmds.setKeyframe(myCon, attribute=myPos, v=myValue)
-
-def backKey(myTime, myCon, myPos, myValue):
-    cmds.currentTime( myTime, edit=True )
-    cmds.setKeyframe(myCon, attribute=myPos, v=myValue)
-
-    cmds.currentTime( myTime+1, edit=True )
-    cmds.setKeyframe(myCon, attribute=myPos, v=0)
-
-def makeKey():
-    cmds.currentUnit( time='film' )
-    cmds.playbackOptions( e=True, min=0, max=51, aet=51 )
-
-    # 0 Default
-
-    # 1 EyeBlinkLeft
-    fwdBackKey(1, 'CTRL_L_eye_blink','ty',1)
-
-    # 2 EyeLookDownLeft
-    fwdBackKey(2, 'CTRL_L_eye','ty',-1)
-
-    # 3 EyeLookInLeft
-    fwdKey(3, 'CTRL_L_eye','tx',-1)
-
-    # 4 EyeLookOutLeft
-    backKey(4, 'CTRL_L_eye','tx',1)
-
-    # 5 EyeLookUpLeft
-    fwdBackKey(5, 'CTRL_L_eye','ty',1)
-
-    # 6 EyeSquintLeft
-    fwdBackKey(6, 'CTRL_L_eye_squintInner','ty',1)
-
-    # 7 EyeWideLeft
-    fwdBackKey(7, 'CTRL_L_eye_blink','ty',-1)
-
-    # 8 EyeBlinkRight
-    fwdBackKey(8, 'CTRL_R_eye_blink','ty',1)
-
-    # 9 EyeLookDownRight
-    fwdBackKey(9, 'CTRL_R_eye','ty', -1)
-
-    # 10 EyeLookInRight
-    fwdKey(10, 'CTRL_R_eye','tx', 1)
-
-    # 11 EyeLookOutRight
-    backKey(11, 'CTRL_R_eye','tx', -1)
-
-    # 12 EyeLookUpRight
-    fwdBackKey(12, 'CTRL_R_eye','ty', 1)
-
-    # 13 EyeSquintRight
-    fwdBackKey(13, 'CTRL_R_eye_squintInner','ty', 1)
-
-    # 14 EyeWideRight
-    fwdBackKey(14, 'CTRL_R_eye_blink','ty', -1)
-
-    # 15 JawForward
-    fwdBackKey(15, 'CTRL_C_jaw_fwdBack','ty', -1)
-
-    # 16 JawLeft
-    fwdKey(16, 'CTRL_C_jaw','tx', -1)
-
-    # 17 JawRight
-    backKey(17, 'CTRL_C_jaw','tx', 1)
-
-    # 18 JawOpen
-    fwdBackKey(18, 'CTRL_C_jaw','ty', 1)
-
-    # 19 MouthFunnel
-    fwdKey(19, 'CTRL_L_mouth_funnelU','ty', 1)
-    fwdKey(19, 'CTRL_R_mouth_funnelU','ty', 1)
-    fwdKey(19, 'CTRL_L_mouth_funnelD','ty', 1)
-    fwdKey(19, 'CTRL_R_mouth_funnelD','ty', 1)
-
-    # 20 MouthPucker
-    fwdBackKey(20, 'CTRL_L_mouth_purseU','ty', 1)
-    fwdBackKey(20, 'CTRL_R_mouth_purseU','ty', 1)
-    fwdBackKey(20, 'CTRL_L_mouth_purseD','ty', 1)
-    fwdBackKey(20, 'CTRL_R_mouth_purseD','ty', 1)
-    backKey(20, 'CTRL_L_mouth_funnelU','ty', 0.75)
-    backKey(20, 'CTRL_R_mouth_funnelU','ty', 0.75)
-    backKey(20, 'CTRL_L_mouth_funnelD','ty', 0.75)
-    backKey(20, 'CTRL_R_mouth_funnelD','ty', 0.75)
-    fwdBackKey(20, 'CTRL_L_mouth_towardsU','ty', 0.41)
-    fwdBackKey(20, 'CTRL_R_mouth_towardsU','ty', 0.41)
-    fwdBackKey(20, 'CTRL_L_mouth_towardsD','ty', 0.41)
-    fwdBackKey(20, 'CTRL_R_mouth_towardsD','ty', 0.41)
-
-    # 21 MouthLeft
-    fwdKey(21, 'CTRL_C_mouth','tx', 1)
-
-    # 22 MouthRight
-    backKey(22, 'CTRL_C_mouth','tx', -1)
-
-    # 23 MouthSmileLeft
-    fwdBackKey(23, 'CTRL_L_mouth_cornerPull','ty', 1)
-
-    # 24 MouthSmileRight
-    fwdBackKey(24, 'CTRL_R_mouth_cornerPull','ty', 1)
-
-    # 25 MouthFrownLeft
-    fwdBackKey(25, 'CTRL_L_mouth_cornerDepress','ty', 1)
-
-    # 26 MouthFrownRight
-    fwdBackKey(26, 'CTRL_R_mouth_cornerDepress','ty', 1)
-
-    # 27 MouthDimpleLeft
-    fwdBackKey(27, 'CTRL_L_mouth_dimple','ty', 1)
-
-    # 28 MouthDimpleRight
-    fwdBackKey(28, 'CTRL_R_mouth_dimple','ty', 1)
-
-    # 29 MouthStretchLeft
-    fwdBackKey(29, 'CTRL_L_mouth_stretch','ty', 1)
-
-    # 30 MouthStretchRight
-    fwdBackKey(30, 'CTRL_R_mouth_stretch','ty', 1)
-
-    # 31 MouthRollLower
-    fwdKey(31, 'CTRL_L_mouth_lipsRollU','ty', 0.5)
-    fwdKey(31, 'CTRL_R_mouth_lipsRollU','ty', 0.5)
-    fwdBackKey(31, 'CTRL_L_mouth_lipsRollD','ty', 1)
-    fwdBackKey(31, 'CTRL_R_mouth_lipsRollD','ty', 1)
-
-    # 32 MouthRollUpper
-    backKey(32, 'CTRL_L_mouth_lipsRollU','ty', 1)
-    backKey(32, 'CTRL_R_mouth_lipsRollU','ty', 1)
-
-    # 33 MouthShrugLower
-    fwdBackKey(33, 'CTRL_L_jaw_ChinRaiseD','ty', 1)
-    fwdBackKey(33, 'CTRL_R_jaw_ChinRaiseD','ty', 1)
-
-    # 34 MouthShrugUpper
-    fwdBackKey(34, 'CTRL_L_jaw_ChinRaiseU','ty', 1)
-    fwdBackKey(34, 'CTRL_R_jaw_ChinRaiseU','ty', 1)
-
-    # 35 MouthPressLeft
-    fwdBackKey(35, 'CTRL_L_mouth_pressU','ty', 1)
-    fwdBackKey(35, 'CTRL_L_mouth_pressD','ty', 1)
-
-    # 36 MouthPressRight
-    fwdBackKey(36, 'CTRL_R_mouth_pressU','ty', 1)
-    fwdBackKey(36, 'CTRL_R_mouth_pressD','ty', 1)
-
-    # 37 MouthLowerDownLeft
-    fwdBackKey(37, 'CTRL_L_mouth_lowerLipDepress','ty', 1)
-
-    # 38 MouthLowerDownRight
-    fwdBackKey(38, 'CTRL_R_mouth_lowerLipDepress','ty', 1)
-
-    # 39 MouthUpperUpLeft
-    fwdBackKey(39, 'CTRL_L_mouth_upperLipRaise','ty', 1)
-
-    # 40 MouthUpperUpRight
-    fwdBackKey(40, 'CTRL_R_mouth_upperLipRaise','ty', 1)
-
-    # 41 BrowDownLeft
-    fwdBackKey(41, 'CTRL_L_brow_down','ty', 1)
-
-    # 42 BrowDownRight
-    fwdBackKey(42, 'CTRL_R_brow_down','ty', 1)
-
-    # 43 BrowInnerUp
-    fwdKey(43, 'CTRL_L_brow_raiseIn','ty', 1)
-    fwdBackKey(43, 'CTRL_R_brow_raiseIn','ty', 1)
-    fwdBackKey(43, 'CTRL_L_brow_lateral','ty', 1)
-    fwdBackKey(43, 'CTRL_R_brow_lateral','ty', 1)
-
-    # 44 BrowOuterUpLeft
-    backKey(44, 'CTRL_L_brow_raiseIn','ty', 1)
-    fwdBackKey(44, 'CTRL_L_brow_raiseOut','ty', 1)
-
-    # 45 BrowOuterUpRight
-    fwdBackKey(45, 'CTRL_R_brow_raiseIn','ty', 1)
-    fwdBackKey(45, 'CTRL_R_brow_raiseOut','ty', 1)
-
-    # 46 CheekPuff
-    fwdBackKey(46, 'CTRL_L_mouth_suckBlow','ty', 1)
-    fwdBackKey(46, 'CTRL_R_mouth_suckBlow','ty', 1)
-    fwdBackKey(46, 'CTRL_L_mouth_lipsBlow','ty', 1)
-    fwdBackKey(46, 'CTRL_R_mouth_lipsBlow','ty', 1)
-
-    # 47 CheekSquintLeft
-    fwdBackKey(47, 'CTRL_L_eye_cheekRaise','ty', 1)
-
-    # 48 CheekSquintRight
-    fwdBackKey(48, 'CTRL_R_eye_cheekRaise','ty', 1)
-
-    # 49 NoseSneerLeft
-    fwdBackKey(49, 'CTRL_L_nose','ty', 1)
-
-    # 50 NoseSneerRight
-    fwdBackKey(50, 'CTRL_R_nose','ty', 1)
-
-    # 51 TonqueOut
-    # fwdBackKey(51, 'CTRL_C_tongue','ty', -0.82)
-    # fwdBackKey(51, 'CTRL_C_tongue_inOut','ty', -0.76)
-    # fwdBackKey(51, 'CTRL_C_tongue_roll','ty', -0.24)
-    # fwdBackKey(51, 'CTRL_C_tongue_narrowWide','ty', 0.62)
-
-    # 51 mouthClose
-    fwdBackKey(51, 'CTRL_C_jaw','ty', 1)
-    fwdBackKey(51, 'CTRL_L_mouth_lipsTogetherU','ty', 1)
-    fwdBackKey(51, 'CTRL_R_mouth_lipsTogetherU','ty', 1)
-    fwdBackKey(51, 'CTRL_L_mouth_lipsTogetherD','ty', 1)
-    fwdBackKey(51, 'CTRL_R_mouth_lipsTogetherD','ty', 1)
-
-# new
 def makeCorrectiveShape(target, pose):
     # mouth close
     makePose('Default')
@@ -275,11 +50,15 @@ def duplicateLODGroup():
     makeCorrectiveShape('EyeBlinkLookInLeft', 'EyeLookInLeft')
     makeCorrectiveShape('EyeBlinkLookOutLeft', 'EyeLookOutLeft')
     makeCorrectiveShape('EyeBlinkLookUpLeft', 'EyeLookUpLeft')
+    makeCorrectiveShape('EyeBlinkSquintLeft', 'EyeSquintLeft')
+    makeCorrectiveShape('EyeBlinkCheekSquintLeft', 'CheekSquintLeft')
 
     makeCorrectiveShape('EyeBlinkLookDownRight', 'EyeLookDownRight')
     makeCorrectiveShape('EyeBlinkLookInRight', 'EyeLookInRight')
     makeCorrectiveShape('EyeBlinkLookOutRight', 'EyeLookOutRight')
     makeCorrectiveShape('EyeBlinkLookUpRight', 'EyeLookUpRight')
+    makeCorrectiveShape('EyeBlinkSquintRight', 'EyeSquintRight')
+    makeCorrectiveShape('EyeBlinkCheekSquintRight', 'CheekSquintRight')
 
     # blendShape
     myTargetList = cmds.listRelatives(ARKitDict.myTargetGrp, c=True)
@@ -300,6 +79,7 @@ def duplicateLODGroup():
     importUI()
     # connectBlendShape2UI()
 
+# pose
 def newCon(con):
     cmds.ls(con)
     for i in cmds.ls(con):
@@ -317,16 +97,26 @@ def defaultPoseNew():
         for con in ARKitDict.myNewDict[item]:
             for axis in ARKitDict.myNewDict[item][con]:
                 cmds.setAttr(newCon(con)+'.'+axis, 0)
+                cmds.setAttr(newCon('CTRL_C_eye')+'.tx', 0)
+                cmds.setAttr(newCon('CTRL_C_eye')+'.ty', 0)
 
 def defaultPose():
     for item in ARKitDict.myDict:
         for con in ARKitDict.myDict[item]:
             for axis in ARKitDict.myDict[item][con]:
-                if len(cmds.ls('CTRL_C_eye'))>1:
-                    defaultPoseNew()
+                if bool(oldCon(con)):
                     cmds.setAttr(oldCon(con)+'.'+axis, 0)
-                else:
-                    cmds.setAttr(con+'.'+axis, 0)
+                    cmds.setAttr(oldCon('CTRL_C_eye')+'.tx', 0)
+                    cmds.setAttr(oldCon('CTRL_C_eye')+'.ty', 0)
+                elif bool(newCon(con)):
+                    defaultPoseNew()
+                # if len(cmds.ls('CTRL_C_eye'))>1:
+                #     defaultPoseNew()
+                #     cmds.setAttr(oldCon(con)+'.'+axis, 0)
+                #     cmds.setAttr(oldCon('CTRL_C_eye')+'.tx', 0)
+                #     cmds.setAttr(oldCon('CTRL_C_eye')+'.ty', 0)
+                # else:
+                #     cmds.setAttr(con+'.'+axis, 0)
 
 def makePoseNew(target):
     if target == 'Default':
@@ -348,12 +138,18 @@ def makePose(target):
         for con in ARKitDict.myDict[target]:
             for axis in ARKitDict.myDict[target][con]:
                 value = ARKitDict.myDict[target][con][axis]
-
-                if len(cmds.ls('CTRL_C_eye'))>1:
-                    makePoseNew(target)
+                if bool(oldCon(con)):
                     cmds.setAttr(oldCon(con)+'.'+axis, value)
+                elif bool(newCon(con)):
+                    makePoseNew(target)
                 else:
-                    cmds.setAttr(con+'.'+axis, value)
+                    makePoseNew(target)
+
+                # if len(cmds.ls('CTRL_C_eye'))>1:
+                #     makePoseNew(target)
+                #     cmds.setAttr(oldCon(con)+'.'+axis, value)
+                # else:
+                #     cmds.setAttr(con+'.'+axis, value)
 
 def importUI():
     usd = cmds.internalVar(usd=True)
@@ -362,57 +158,46 @@ def importUI():
 
     cmds.file(tempPath, i=True)
 
-def plusConnect(con, axis, target):
-    if bool(cmds.ls(target+'_clamp')) == False:
-        myClamp = cmds.createNode('clamp', n=target+'_clamp')
-        cmds.setAttr(myClamp+'.maxR', 1)
-
-        cmds.connectAttr(newCon(con)+'.'+axis, myClamp+'.inputR', f=True)
-        cmds.connectAttr(myClamp+'.outputR', 'BS_ARKit.'+target, f=True)
-
-def minusConnect(con, axis, target):
-    if bool(cmds.ls(target+'_clamp')) == False:
-        myMult = cmds.createNode('multiplyDivide', n=target+'_mult')
-        cmds.setAttr(myMult+'.input2X', -1)
-
-        myClamp = cmds.createNode('clamp', n=target+'_clamp')
-        cmds.setAttr(myClamp+'.maxR', 1)
-
-        cmds.connectAttr(newCon(con)+'.'+axis, myMult+'.input1X', f=True)
-        cmds.connectAttr(myMult+'.outputX', myClamp+'.inputR', f=True)
-        cmds.connectAttr(myClamp+'.outputR', 'BS_ARKit.'+target, f=True)
-
-def multiConnect(conA, conB, axis, target, value):
-    if bool(cmds.ls(target+'_clamp')) == False:
-        # eye axis
-        myMultA = cmds.createNode('multiplyDivide', n=target+'_A_mult')
-        cmds.setAttr(myMultA+'.input2X', value)
-
-        myMultB = cmds.createNode('multiplyDivide', n=target+'_B_mult')
-        cmds.setAttr(myMultB+'.input2X', value)
-
-        myPlus = cmds.createNode('plusMinusAverage', n=target+'_plus')
-
-        myClamp = cmds.createNode('clamp', n=target+'_clamp')
-        cmds.setAttr(myClamp+'.maxR', 1)
-
-        cmds.connectAttr(newCon(conA)+'.'+axis, myMultA+'.input1X', f=True)
-        cmds.connectAttr(myMultA+'.outputX', myPlus+'.input1D[0]', f=True)
-
-        cmds.connectAttr(newCon(conB)+'.'+axis, myMultB+'.input1X', f=True)
-        cmds.connectAttr(myMultB+'.outputX', myPlus+'.input1D[1]', f=True)
-
-        cmds.connectAttr(myPlus+'.output1D', myClamp+'.inputR', f=True)
-        cmds.connectAttr(myClamp+'.outputR', 'BS_ARKit.'+target, f=True)
-
-def connectExp(con, axis, conExp, target):
+# connect
+def connectExpToTarget(con, axis, conExp, target):
     cmds.connectAttr ( newCon(con)+'.'+axis, conExp+'.input', f=True )
 
     myExpTarget = newCon('CTRL_expressions') + '.' + conExp.replace( 'CTRL_expressions_', '' )
     cmds.connectAttr ( conExp+'.output', myExpTarget, f=True )
     cmds.connectAttr ( myExpTarget, 'BS_ARKit.'+target, f=True )
 
-def connectEye():
+def connectExp(con, axis, conExp):
+    cmds.connectAttr ( newCon(con)+'.'+axis, conExp+'.input', f=True )
+
+    myExpTarget = newCon('CTRL_expressions') + '.' + conExp.replace( 'CTRL_expressions_', '' )
+    cmds.connectAttr ( conExp+'.output', myExpTarget, f=True )
+    # cmds.connectAttr ( myExpTarget, 'BS_ARKit.'+target, f=True )
+
+def eyeBlinkConnect(target, exp, blink):
+    myCond = cmds.createNode('condition', n=target+'_cond')
+    cmds.setAttr(myCond+'.operation', 2)
+
+    myMult = cmds.createNode('multiplyDivide', n=target+'_mult')
+
+    cmds.connectAttr(newCon('CTRL_expressions')+'.'+exp, myCond+'.colorIfTrueR', f=True)
+    cmds.connectAttr(newCon('CTRL_expressions')+'.'+blink, myCond+'.firstTerm', f=True)
+    cmds.connectAttr (myCond+'.outColorR', myMult+'.input1X', f=True)
+    cmds.connectAttr (newCon('CTRL_expressions')+'.'+blink, myMult+'.input2X', f=True)
+    cmds.connectAttr (myMult+'.outputX', 'BS_ARKit.'+target, f=True)
+
+def eyeConnect():
+    # basic connect
+    connectExpToTarget('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkL', 'EyeBlinkLeft')
+    connectExpToTarget('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeWidenL', 'EyeWideLeft')
+    connectExpToTarget('CTRL_L_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerL', 'EyeSquintLeft')
+    connectExpToTarget('CTRL_L_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseL', 'CheekSquintLeft')
+
+    connectExpToTarget('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkR', 'EyeBlinkRight')
+    connectExpToTarget('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeWidenR', 'EyeWideRight')
+    connectExpToTarget('CTRL_R_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerR', 'EyeSquintRight')
+    connectExpToTarget('CTRL_R_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseR', 'CheekSquintRight')
+
+    # detail connect
     cmds.connectAttr ( newCon('CTRL_L_eye')+'.tx', 'LOC_L_eyeUIDriver_rotateY.input', f=True )
     cmds.connectAttr ( newCon('CTRL_L_eye')+'.ty', 'LOC_L_eyeUIDriver_rotateX.input', f=True )
     cmds.connectAttr ( newCon('CTRL_R_eye')+'.tx', 'LOC_R_eyeUIDriver_rotateY.input', f=True )
@@ -443,19 +228,6 @@ def connectEye():
     cmds.connectAttr ( 'CTRL_expressions_eyeLookDownR.output', newCon('CTRL_expressions')+'.eyeLookDownR', f=True )
     cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookDownR', 'BS_ARKit.EyeLookDownRight', f=True )
 
-def eyeBlinkConnect(target, exp, blink):
-    myCond = cmds.createNode('condition', n=target+'_cond')
-    cmds.setAttr(myCond+'.operation', 2)
-
-    myMult = cmds.createNode('multiplyDivide', n=target+'_mult')
-
-    cmds.connectAttr(newCon('CTRL_expressions')+'.'+exp, myCond+'.colorIfTrueR', f=True)
-    cmds.connectAttr(newCon('CTRL_expressions')+'.'+blink, myCond+'.firstTerm', f=True)
-    cmds.connectAttr (myCond+'.outColorR', myMult+'.input1X', f=True)
-    cmds.connectAttr (newCon('CTRL_expressions')+'.'+blink, myMult+'.input2X', f=True)
-    cmds.connectAttr (myMult+'.outputX', 'BS_ARKit.'+target, f=True)
-
-def eyeConnect():
     # minus eye blink
     myBlinkPlus = cmds.createNode('plusMinusAverage', n='EyeBlinkLeft_plus')
     cmds.setAttr(myBlinkPlus+'.operation', 2)
@@ -465,6 +237,8 @@ def eyeConnect():
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookInLeft', myBlinkPlus+'.input1D[2]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookOutLeft', myBlinkPlus+'.input1D[3]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookUpLeft', myBlinkPlus+'.input1D[4]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkSquintLeft', myBlinkPlus+'.input1D[5]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkCheekSquintLeft', myBlinkPlus+'.input1D[6]', f=True)
     cmds.connectAttr (myBlinkPlus+'.output1D', 'BS_ARKit.EyeBlinkLeft', f=True)
 
     myBlinkPlus = cmds.createNode('plusMinusAverage', n='EyeBlinkRight_plus')
@@ -475,6 +249,8 @@ def eyeConnect():
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookInRight', myBlinkPlus+'.input1D[2]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookOutRight', myBlinkPlus+'.input1D[3]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookUpRight', myBlinkPlus+'.input1D[4]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkSquintRight', myBlinkPlus+'.input1D[5]', f=True)
+    cmds.connectAttr ('BS_ARKit.EyeBlinkCheekSquintRight', myBlinkPlus+'.input1D[6]', f=True)
     cmds.connectAttr (myBlinkPlus+'.output1D', 'BS_ARKit.EyeBlinkRight', f=True)
 
     # connect
@@ -482,91 +258,561 @@ def eyeConnect():
     eyeBlinkConnect('EyeBlinkLookInLeft', 'eyeLookRightL', 'eyeBlinkL')
     eyeBlinkConnect('EyeBlinkLookOutLeft', 'eyeLookLeftL', 'eyeBlinkL')
     eyeBlinkConnect('EyeBlinkLookUpLeft', 'eyeLookUpL', 'eyeBlinkL')
+    eyeBlinkConnect('EyeBlinkSquintLeft', 'eyeSquintInnerL', 'eyeBlinkL')
+    eyeBlinkConnect('EyeBlinkCheekSquintLeft', 'eyeCheekRaiseL', 'eyeBlinkL')
 
     eyeBlinkConnect('EyeBlinkLookDownRight', 'eyeLookDownR', 'eyeBlinkR')
     eyeBlinkConnect('EyeBlinkLookInRight', 'eyeLookLeftR', 'eyeBlinkR')
     eyeBlinkConnect('EyeBlinkLookOutRight', 'eyeLookRightR', 'eyeBlinkR')
     eyeBlinkConnect('EyeBlinkLookUpRight', 'eyeLookUpR', 'eyeBlinkR')
+    eyeBlinkConnect('EyeBlinkSquintRight', 'eyeSquintInnerR', 'eyeBlinkR')
+    eyeBlinkConnect('EyeBlinkCheekSquintRight', 'eyeCheekRaiseR', 'eyeBlinkR')
+
+    # grp
+    cmds.delete(newCon('headRigging_grp'))
+    cmds.parent(oldCon('headRigging_grp'), newCon('headRig_grp'))
+
+def jawConnect():
+    connectExp('CTRL_C_jaw_fwdBack', 'ty', 'CTRL_expressions_jawFwd')
+    connectExp('CTRL_C_jaw_fwdBack', 'ty', 'CTRL_expressions_jawBack')
+
+    myMult = cmds.createNode('multiplyDivide', n='jaw_mult')
+    cmds.setAttr(myMult+'.input2X', -1)
+    cmds.connectAttr ( newCon('CTRL_C_jaw_fwdBack')+'.ty', myMult+'.input1X', f=True )
+    cmds.connectAttr ( myMult+'.outputX', 'BS_ARKit.JawForward', f=True )
+
+    connectExpToTarget('CTRL_C_jaw', 'tx', 'CTRL_expressions_jawLeft', 'JawLeft')
+    connectExpToTarget('CTRL_C_jaw', 'tx', 'CTRL_expressions_jawRight', 'JawRight')
+    connectExpToTarget('CTRL_C_jaw', 'ty', 'CTRL_expressions_jawOpen', 'JawOpen')
+
+def mouthConnect():
+    myList = ['UL','UR','DL','DR']
+    # mouthFunnel
+    cmds.connectAttr ( newCon('CTRL_C_mouth_funnelD')+'.ty', 'BS_ARKit.MouthFunnel', f=True )
+
+    # MouthPucker - mouthFunnel
+    myMult = cmds.createNode('multiplyDivide', n='mouthFunnel_mult')
+    cmds.setAttr(myMult+'.input2X', 0.75)
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', myMult+'.input1X', f=True )
+
+    myPlus = cmds.createNode('plusMinusAverage', n='mouthFunnel_plus')
+    cmds.connectAttr ( myMult+'.outputX', myPlus+'.input1D[0]', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_funnelD')+'.ty', myPlus+'.input1D[1]', f=True )
+
+    myClamp = cmds.createNode('clamp', n='mouthFunnel_clamp')
+    cmds.setAttr(myClamp+'.maxR', 1)
+    cmds.connectAttr ( myPlus+'.output1D', myClamp+'.inputR', f=True )
+
+    for i in myList:
+        cmds.connectAttr (myClamp+'.outputR', newCon('CTRL_expressions')+'.mouthFunnel'+i, f=True)
+        cmds.connectAttr ( myClamp+'.outputR', 'CTRL_expressions_mouthFunnel'+i+'.input', f=True )
+
+    # MouthPucker -mouthPurse
+    for i in myList:
+        connectExp('CTRL_C_mouth_purseD', 'ty', 'CTRL_expressions_mouthLipsPurse'+i)
+
+    # MouthPucker - mouthTowards
+    myMult = cmds.createNode('multiplyDivide', n='mouthTowards_mult')
+    cmds.setAttr(myMult+'.input2X', 0.41)
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', myMult+'.input1X', f=True )
+
+    for i in myList:
+        cmds.connectAttr ( myMult+'.outputX', 'CTRL_expressions.mouthLipsTowards'+i, f=True )
+        cmds.connectAttr ( myMult+'.outputX', newCon('CTRL_expressions')+'.mouthLipsTowards'+i, f=True )
+
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', 'BS_ARKit.MouthPucker', f=True )
+
+    # Mouth etc
+    connectExpToTarget('CTRL_C_mouth', 'ty', 'CTRL_expressions_mouthLeft', 'MouthLeft')
+    connectExpToTarget('CTRL_C_mouth', 'ty', 'CTRL_expressions_mouthRight', 'MouthRight')
+    connectExpToTarget('CTRL_L_mouth_cornerPull', 'ty', 'CTRL_expressions_mouthCornerPullL', 'MouthSmileLeft')
+    connectExpToTarget('CTRL_R_mouth_cornerPull', 'ty', 'CTRL_expressions_mouthCornerPullR', 'MouthSmileRight')
+    connectExpToTarget('CTRL_L_mouth_cornerDepress', 'ty', 'CTRL_expressions_mouthCornerDepressL', 'MouthFrownLeft')
+    connectExpToTarget('CTRL_R_mouth_cornerDepress', 'ty', 'CTRL_expressions_mouthCornerDepressR', 'MouthFrownRight')
+    connectExpToTarget('CTRL_L_mouth_dimple', 'ty', 'CTRL_expressions_mouthDimpleL', 'MouthDimpleLeft')
+    connectExpToTarget('CTRL_R_mouth_dimple', 'ty', 'CTRL_expressions_mouthDimpleR', 'MouthDimpleRight')
+    connectExpToTarget('CTRL_L_mouth_stretch', 'ty', 'CTRL_expressions_mouthStretchL', 'MouthStretchLeft')
+    connectExpToTarget('CTRL_R_mouth_stretch', 'ty', 'CTRL_expressions_mouthStretchR', 'MouthStretchRight')
+
+    # MouthRollUpper
+    myMult = cmds.createNode('multiplyDivide', n='MouthRollLower_mult')
+    cmds.setAttr(myMult+'.input2X', 0.5)
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', myMult+'.input1X', f=True )
+
+    myCond = cmds.createNode('condition', n='MouthRollLower_cond')
+    cmds.setAttr(myCond+'.operation', 1)
+    cmds.connectAttr ( myMult+'.outputX', myCond+'.firstTerm', f=True )
+    cmds.connectAttr ( myMult+'.outputX', myCond+'.colorIfTrueR', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', myCond+'.colorIfFalseR', f=True )
+
+    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollInR.input', f=True )
+    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollOutR.input', f=True )
+    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollInL.input', f=True )
+    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollOutL.input', f=True )
+
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', 'BS_ARKit.MouthRollUpper', f=True )
+
+    # MouthRollLower
+    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollOutR')
+    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollInR')
+    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollOutL')
+    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollInL')
+
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', 'BS_ARKit.MouthRollLower', f=True )
+
+    # MouthShrugLower
+    connectExp('CTRL_C_jaw_ChinRaiseD', 'ty', 'CTRL_expressions_jawChinRaiseDL')
+    connectExp('CTRL_C_jaw_ChinRaiseD', 'ty', 'CTRL_expressions_jawChinRaiseDR')
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD'+'.ty', 'BS_ARKit.MouthShrugLower', f=True )
+
+    # MouthShrugUpper
+    connectExp('CTRL_C_jaw_ChinRaiseU', 'ty', 'CTRL_expressions_jawChinRaiseUL')
+    connectExp('CTRL_C_jaw_ChinRaiseU', 'ty', 'CTRL_expressions_jawChinRaiseUR')
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU'+'.ty', 'BS_ARKit.MouthShrugUpper', f=True )
+
+    # MouthPressLeft
+    connectExp('CTRL_L_mouth_press', 'ty', 'CTRL_expressions_mouthPressUL')
+    connectExp('CTRL_L_mouth_press', 'ty', 'CTRL_expressions_mouthPressDL')
+    cmds.connectAttr ( 'CTRL_L_mouth_press'+'.ty', 'BS_ARKit.MouthPressLeft', f=True )
+
+    # MouthPressRight
+    connectExp('CTRL_R_mouth_press', 'ty', 'CTRL_expressions_mouthPressUR')
+    connectExp('CTRL_R_mouth_press', 'ty', 'CTRL_expressions_mouthPressDR')
+    cmds.connectAttr ( 'CTRL_R_mouth_press'+'.ty', 'BS_ARKit.MouthPressRight', f=True )
+
+    # MouthLowerDownLeft, MouthLowerDownRight
+    connectExpToTarget('CTRL_L_mouth_lowerLipDepress', 'ty', 'CTRL_expressions_mouthLowerLipDepressL', 'MouthLowerDownLeft')
+    connectExpToTarget('CTRL_R_mouth_lowerLipDepress', 'ty', 'CTRL_expressions_mouthLowerLipDepressR', 'MouthLowerDownRight')
+
+    # MouthUpperUpLeft, MouthUpperUpRight
+    connectExpToTarget('CTRL_L_mouth_upperLipRaise', 'ty', 'CTRL_expressions_mouthUpperLipRaiseL', 'MouthUpperUpLeft')
+    connectExpToTarget('CTRL_R_mouth_upperLipRaise', 'ty', 'CTRL_expressions_mouthUpperLipRaiseR', 'MouthUpperUpRight')
+
+    # MouthClose
+    myMult = cmds.createNode('multiplyDivide', n='MouthClose_mult')
+    cmds.connectAttr ( newCon('CTRL_C_jaw')+'.ty', myMult+'.input1X', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', myMult+'.input2X', f=True )
+
+    myCond = cmds.createNode('condition', n='MouthClose_cond')
+    cmds.setAttr(myCond+'.operation', 1)
+    cmds.setAttr(myCond+'.colorIfFalseR', 0)
+    cmds.connectAttr ( newCon('CTRL_C_jaw')+'.ty', myCond+'.firstTerm', f=True )
+    cmds.connectAttr ( myMult+'.outputX', myCond+'.colorIfTrueR', f=True )
+    cmds.connectAttr ( myCond+'.outColorR', 'BS_ARKit.MouthClose', f=True )
+
+    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUL.input', f=True )
+    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUR.input', f=True )
+    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDL.input', f=True )
+    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDR.input', f=True )
+    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherUL')
+    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherUR')
+    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherDL')
+    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherDR')
+
+def browConnect():
+    # BrowDownLeft, BrowDownRight
+    connectExpToTarget('CTRL_L_brow_down', 'ty', 'CTRL_expressions_browDownL', 'BrowDownLeft')
+    connectExpToTarget('CTRL_R_brow_down', 'ty', 'CTRL_expressions_browDownR', 'BrowDownRight')
+
+    # browRaiseInL
+    myPlus = cmds.createNode('plusMinusAverage', n='browRaiseInL_plus')
+    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', myPlus+'.input1D[0]', f=True )
+    cmds.connectAttr ( newCon('CTRL_L_brow_raiseOut')+'.ty', myPlus+'.input1D[1]', f=True )
+
+    myClamp = cmds.createNode('clamp', n='browRaiseInL_clamp')
+    cmds.setAttr(myClamp+'.maxR', 1)
+    cmds.connectAttr ( myPlus+'.output1D', myClamp+'.inputR', f=True )
+
+    cmds.connectAttr ( myClamp+'.outputR', 'CTRL_expressions_browRaiseInL.input', f=True )
+    cmds.connectAttr ( myClamp+'.outputR', newCon('CTRL_expressions')+'.browRaiseInL', f=True )
+
+    # browRaiseInR
+    myPlus = cmds.createNode('plusMinusAverage', n='browRaiseInR_plus')
+    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', myPlus+'.input1D[0]', f=True )
+    cmds.connectAttr ( newCon('CTRL_R_brow_raiseOut')+'.ty', myPlus+'.input1D[1]', f=True )
+
+    myClamp = cmds.createNode('clamp', n='browRaiseInR_clamp')
+    cmds.setAttr(myClamp+'.maxR', 1)
+    cmds.connectAttr ( myPlus+'.output1D', myClamp+'.inputR', f=True )
+
+    cmds.connectAttr ( myClamp+'.outputR', 'CTRL_expressions_browRaiseInR.input', f=True )
+    cmds.connectAttr ( myClamp+'.outputR', newCon('CTRL_expressions')+'.browRaiseInR', f=True )
+
+    # BrowInnerUp
+    connectExp('CTRL_C_brow_raiseIn', 'ty', 'CTRL_expressions_browLateralL')
+    connectExp('CTRL_C_brow_raiseIn', 'ty', 'CTRL_expressions_browLateralR')
+
+    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', 'BS_ARKit.BrowInnerUp', f=True )
+
+    # BrowOuterUpLeft
+    connectExp('CTRL_L_brow_raiseOut', 'ty', 'CTRL_expressions_browRaiseOuterL')
+    cmds.connectAttr ( newCon('CTRL_L_brow_raiseOut')+'.ty', 'BS_ARKit.BrowOuterUpLeft', f=True )
+
+    # BrowOuterUpRight
+    connectExp('CTRL_R_brow_raiseOut', 'ty', 'CTRL_expressions_browRaiseOuterR')
+    cmds.connectAttr ( newCon('CTRL_R_brow_raiseOut')+'.ty', 'BS_ARKit.BrowOuterUpRight', f=True )
+
+def cheekConnect():
+    connectExp('CTRL_C_mouth_suckBlow', 'ty', 'CTRL_expressions_mouthCheekSuckL')
+    connectExp('CTRL_C_mouth_suckBlow', 'ty', 'CTRL_expressions_mouthCheekSuckR')
+    connectExp('CTRL_C_mouth_suckBlow', 'ty', 'CTRL_expressions_mouthCheekBlowL')
+    connectExp('CTRL_C_mouth_suckBlow', 'ty', 'CTRL_expressions_mouthCheekBlowR')
+    connectExp('CTRL_C_mouth_suckBlow', 'ty', 'CTRL_expressions_mouthLipsBlowL')
+    connectExp('CTRL_C_mouth_suckBlow', 'ty', 'CTRL_expressions_mouthLipsBlowR')
+    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'BS_ARKit.CheekPuff', f=True )
+
+def noseConnect():
+    connectExp('CTRL_L_nose', 'ty', 'CTRL_expressions_noseWrinkleL')
+    connectExp('CTRL_L_nose', 'ty', 'CTRL_expressions_noseNostrilDilateL')
+    cmds.connectAttr ( newCon('CTRL_L_nose')+'.ty', 'BS_ARKit.NoseSneerLeft', f=True )
+
+    connectExp('CTRL_R_nose', 'ty', 'CTRL_expressions_noseWrinkleR')
+    connectExp('CTRL_R_nose', 'ty', 'CTRL_expressions_noseNostrilDilateR')
+    cmds.connectAttr ( newCon('CTRL_R_nose')+'.ty', 'BS_ARKit.NoseSneerRight', f=True )
+
+def multipliersConnect():
+    mySide = ['L','R']
+    for i in mySide:
+        # CTRL_C_brow_raiseIn
+        # CTRL_L_nose, CTRL_R_nose
+        myBrowLateralPlus = cmds.createNode ( 'plusMinusAverage', n='browLateral%s_plus'%i )
+        myBrowLateralClamp = cmds.createNode ( 'clamp', n='browLateral%s_clamp'%i )
+        cmds.setAttr ( myBrowLateralClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.browLateral%s'%i, myBrowLateralPlus+'.input1D[0]', f=True )
+        cmds.connectAttr ( myBrowLateralPlus+'.output1D', myBrowLateralClamp+'.inputR', f=True )
+        cmds.connectAttr ( myBrowLateralClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_browsLateral_'+i, f=True ) #04, #06
+        cmds.connectAttr ( myBrowLateralClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_browsLateral_'+i, f=True ) #05, #07
+
+        myMult = cmds.createNode( 'multiplyDivide', n='noseBrowLateral%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.3 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.noseWrinkle'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myBrowLateralPlus+'.input1D[1]', f=True ) #04 #05, #06 #07
+
+        cmds.connectAttr( newCon('CTRL_expressions')+'.browRaiseIn'+i, newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_browsRaiseInner_'+i, f=True ) #08 #10
+        cmds.connectAttr( newCon('CTRL_expressions')+'.browRaiseIn'+i, newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_browsRaiseInner_'+i, f=True ) #09 #11
+
+        # CTRL_L_brow_down, CTRL_R_brow_down
+        # CTRL_L_nose, CTRL_R_nose
+        myBrowDownPlus = cmds.createNode ( 'plusMinusAverage', n='browDown%s_plus'%i )
+        myBrowDownClamp = cmds.createNode ( 'clamp', n='browDown%s_clamp'%i )
+        cmds.setAttr ( myBrowDownClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.browDown%s'%i, myBrowDownPlus+'.input1D[0]', f=True ) #08 #10, #09 #11
+        cmds.connectAttr ( myBrowDownPlus+'.output1D', myBrowDownClamp+'.inputR', f=True )
+        cmds.connectAttr ( myBrowDownClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_browsDown_'+i, f=True ) #00, #02
+        cmds.connectAttr ( myBrowDownClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_browsDown_'+i, f=True ) #01, #03
+
+        myMult = cmds.createNode( 'multiplyDivide', n='noseBrowDown%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.2 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.noseWrinkle'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myBrowDownPlus+'.input1D[1]', f=True ) #08 #09, #10 #11
+
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.noseWrinkle'+i, newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_noseWrinkler_'+i, f=True ) #36, #38
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.noseWrinkle'+i, newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_noseWrinkler_'+i, f=True ) #37, #39
+
+        # CTRL_L_brow_raiseOut, CTRL_R_brow_raiseOut
+        cmds.connectAttr( newCon('CTRL_expressions')+'.browRaiseOuter'+i, newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_browsRaiseOuter_'+i, f=True ) #12, #14
+        cmds.connectAttr( newCon('CTRL_expressions')+'.browRaiseOuter'+i, newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_browsRaiseOuter_'+i, f=True ) #13, #15
+
+        # CTRL_L_eye_blink, CTRL_R_eye_blink
+        # CTRL_L_eye_squintInner, CTRL_R_eye_squintInner
+        # CTRL_L_eye_cheekRaise, CTRL_R_eye_cheekRaise
+        # CTRL_L_mouth_cornerPull, CTRL_R_mouth_cornerPull
+        # CTRL_L_mouth_dimple, CTRL_R_mouth_dimple
+        # CTRL_L_eye, CTRL_R_eye
+        # blink
+        myBlinkPlus = cmds.createNode ( 'plusMinusAverage', n='blink%s_plus'%i )
+        myBlinkClamp = cmds.createNode ( 'clamp', n='blink%s_clamp'%i )
+        cmds.setAttr ( myBlinkClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( myBlinkPlus+'.output1D', myBlinkClamp+'.inputR', f=True )
+        cmds.connectAttr ( myBlinkClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_blink_'+i, f=True ) #16, #20
+        cmds.connectAttr ( myBlinkClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_blink_'+i, f=True ) #18, #22
+        # squintInner
+        mySquintInnerPlus = cmds.createNode ( 'plusMinusAverage', n='squintInner%s_plus'%i )
+        mySquintInnerClamp = cmds.createNode ( 'clamp', n='squintInner%s_clamp'%i )
+        cmds.setAttr ( mySquintInnerClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( mySquintInnerPlus+'.output1D', mySquintInnerClamp+'.inputR', f=True )
+        cmds.connectAttr ( mySquintInnerClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_squintInner_'+i, f=True ) #17 #21
+        cmds.connectAttr ( mySquintInnerClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_squintInner_'+i, f=True ) #19 #23
+        # cheekRaiseInner
+        myCheekRaiseInnerPlus = cmds.createNode ( 'plusMinusAverage', n='cheekRaiseInner%s_plus'%i )
+        myCheekRaiseInnerClamp = cmds.createNode ( 'clamp', n='cheekRaiseInner%s_clamp'%i )
+        cmds.setAttr ( myCheekRaiseInnerClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( myCheekRaiseInnerPlus+'.output1D', myCheekRaiseInnerClamp+'.inputR', f=True )
+        cmds.connectAttr ( myCheekRaiseInnerClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseInner_'+i, f=True ) #24 #30
+        cmds.connectAttr ( myCheekRaiseInnerClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseInner_'+i, f=True ) #27 #33
+        # cheekRaiseOuter
+        myCheekRaiseOuterPlus = cmds.createNode ( 'plusMinusAverage', n='cheekRaiseOuter%s_plus'%i )
+        myCheekRaiseOuterClamp = cmds.createNode ( 'clamp', n='cheekRaiseOuter%s_clamp'%i )
+        cmds.setAttr ( myCheekRaiseOuterClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( myCheekRaiseOuterPlus+'.output1D', myCheekRaiseOuterClamp+'.inputR', f=True )
+        cmds.connectAttr ( myCheekRaiseOuterClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseOuter_'+i, f=True ) #25 #31
+        cmds.connectAttr ( myCheekRaiseOuterClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseOuter_'+i, f=True ) #28 #34
+        # smile
+        mySmilePlus = cmds.createNode ( 'plusMinusAverage', n='smile%s_plus'%i )
+        mySmileClamp = cmds.createNode ( 'clamp', n='smile%s_clamp'%i )
+        cmds.setAttr ( mySmileClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( mySmilePlus+'.output1D', mySmileClamp+'.inputR', f=True )
+        cmds.connectAttr ( mySmileClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_smile_'+i, f=True ) #40 #50
+        cmds.connectAttr ( mySmileClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_smile_'+i, f=True ) #41 #51
+        # lips
+        myLipsPlus = cmds.createNode ( 'plusMinusAverage', n='lips%s_plus'%i )
+        myLipsClamp = cmds.createNode ( 'clamp', n='lips%s_clamp'%i )
+        cmds.setAttr ( myLipsClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( myLipsPlus+'.output1D', myLipsClamp+'.inputR', f=True )
+        cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm13_lips_U'+i, f=True ) #52, #56
+        cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm13_lips_D'+i, f=True ) #53, #57
+        cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm13_lips_U'+i, f=True ) #54, #58
+        cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm13_lips_D'+i, f=True ) #55, #59
+
+        # eyeLookDown
+        myMult = cmds.createNode( 'multiplyDivide', n='eyeLookDown%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 1.0 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookDown'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myBlinkPlus+'.input1D[0]', f=True ) #16 #18, #20 #22
+        # eyeBlink
+        myMult = cmds.createNode( 'multiplyDivide', n='eyeBlink%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.3 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeBlink'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', mySquintInnerPlus+'.input1D[0]', f=True ) #17 #19, #21 #23
+        # eyeSquintInner
+        myMult = cmds.createNode( 'multiplyDivide', n='eyeSquintInner%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.8 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeSquintInner'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', mySquintInnerPlus+'.input1D[1]', f=True ) #17 #19, #21 #23
+        # eyeCheekRaise
+        myMult = cmds.createNode( 'multiplyDivide', n='eyeCheekRaise%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.8 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeCheekRaise'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myCheekRaiseInnerPlus+'.input1D[0]', f=True ) #24 #27, #30 #33
+        cmds.connectAttr ( myCheekRaiseInnerPlus+'.output1D', myCheekRaiseInnerClamp+'.inputR', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myCheekRaiseOuterPlus+'.input1D[0]', f=True ) #25 #28, #31 #34
+        cmds.connectAttr ( myMult+'.outputX', newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseUpper_'+i, f=True ) #26 #32
+        cmds.connectAttr ( myMult+'.outputX', newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseUpper_'+i, f=True ) #29 #35
+        # mouthCornerPull
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthCornerPull_0.8_%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.8 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthCornerPull'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myCheekRaiseInnerPlus+'.input1D[1]', f=True ) #24 #27, #30 #33
+        cmds.connectAttr ( myMult+'.outputX', myCheekRaiseOuterPlus+'.input1D[1]', f=True ) #25 #28, #31 #34
+        ## mouthCornerPull
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthCornerPull_1.0_%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 1.0 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthCornerPull'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', mySmilePlus+'.input1D[0]', f=True ) #40 #41, #50 #51
+        cmds.connectAttr ( myMult+'.outputX', myLipsPlus+'.input1D[0]', f=True ) #52 #53 #54 #55, #56 #57 #58 #59
+        # mouthDimple
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthDimple_0.4_%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.4 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthDimple'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', mySmilePlus+'.input1D[1]', f=True ) #40 #41, #50 #51
+        # mouthDimple
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthDimple_0.5_%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.5 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthDimple'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myLipsPlus+'.input1D[1]', f=True ) #52 #53 #54 #55, #56 #57 #58 #59
+        # mouthStretch
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthStretch'+i, myLipsPlus+'.input1D[2]', f=True ) #52 #53 #54 #55, #56 #57 #58 #59
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthStretch'+i, newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_mouthStretch_'+i, f=True ) #60, #62
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthStretch'+i, newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_mouthStretch_'+i, f=True ) #61, #63
+
+        # mouthLeft, mouthRight
+        if i == 'L':
+            # lips
+            myLipsPlus = cmds.createNode ( 'plusMinusAverage', n='lips_plus' )
+            myLipsClamp = cmds.createNode ( 'clamp', n='lips_clamp' )
+            cmds.setAttr ( myLipsClamp+'.maxR', 1 )
+
+            cmds.connectAttr ( myLipsPlus+'.output1D', myLipsClamp+'.inputR', f=True )
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_UL', f=True ) #42
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_UR', f=True ) #43
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_DL', f=True ) #44
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_DR', f=True ) #45
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_UL', f=True ) #46
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_UR', f=True ) #47
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_DL', f=True ) #48
+            cmds.connectAttr ( myLipsClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_DR', f=True ) #49
+
+            myMult = cmds.createNode( 'multiplyDivide', n='mouthLeft_0.5_mult' )
+            cmds.setAttr ( myMult+'.input2X', 0.5 )
+            cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLeft', myMult+'.input1X', f=True )
+            cmds.connectAttr ( myMult+'.outputX', myCheekRaiseInnerPlus+'.input1D[4]', f=True ) #24 #27
+            cmds.connectAttr ( myMult+'.outputX', myCheekRaiseOuterPlus+'.input1D[2]', f=True ) #25 #28
+            cmds.connectAttr ( myMult+'.outputX', myLipsPlus+'.input1D[0]', f=True ) #42 #43 #44 #45 #46 #47 #48 #49
+            #
+            myMult = cmds.createNode( 'multiplyDivide', n='mouthLeft_1.0_mult' )
+            cmds.setAttr ( myMult+'.input2X', 1.0 )
+            cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLeft', myMult+'.input1X', f=True )
+            cmds.connectAttr ( myMult+'.outputX', mySmilePlus+'.input1D[2]', f=True ) #40 #41
+        else:
+            myMult = cmds.createNode( 'multiplyDivide', n='mouthRight_0.5_mult' )
+            cmds.setAttr ( myMult+'.input2X', 0.5 )
+            cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthRight', myMult+'.input1X', f=True )
+            cmds.connectAttr ( myMult+'.outputX', myCheekRaiseInnerPlus+'.input1D[4]', f=True ) #30 #33
+            cmds.connectAttr ( myMult+'.outputX', myCheekRaiseOuterPlus+'.input1D[2]', f=True ) #31 #34
+            myLipsPlus = 'lips_plus'
+            cmds.connectAttr ( myMult+'.outputX', myLipsPlus+'.input1D[1]', f=True ) #42 #43 #44 #45 #46 #47 #48 #49
+            #
+            myMult = cmds.createNode( 'multiplyDivide', n='mouthPucker_0.625_mult' )
+            cmds.setAttr ( myMult+'.input2X', 0.625 )
+            cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLipsPurseU'+i, myMult+'.input1X', f=True )
+            myLipsPlus = 'lips_plus'
+            cmds.connectAttr ( myMult+'.outputX', myLipsPlus+'.input1D[2]', f=True ) #42 #43 #44 #45 #46 #47 #48 #49
+            #
+            myMult = cmds.createNode( 'multiplyDivide', n='mouthRight_1.0_mult' )
+            cmds.setAttr ( myMult+'.input2X', 1.0 )
+            cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthRight', myMult+'.input1X', f=True )
+            cmds.connectAttr ( myMult+'.outputX', mySmilePlus+'.input1D[2]', f=True ) #50 #51
+
+        # CTRL_C_jaw_ChinRaiseD
+        # chinRaise
+        myChinRaisePlus = cmds.createNode ( 'plusMinusAverage', n='chinRaise%s_plus'%i )
+        myChinRaiseClamp = cmds.createNode ( 'clamp', n='chinRaise%s_clamp'%i )
+        cmds.setAttr ( myChinRaiseClamp+'.maxR', 1 )
+
+        cmds.connectAttr ( myChinRaisePlus+'.output1D', myChinRaiseClamp+'.inputR', f=True )
+        cmds.connectAttr ( myChinRaiseClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_chinRaise_'+i, f=True ) #72, #74
+        cmds.connectAttr ( myChinRaiseClamp+'.outputR', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_chinRaise_'+i, f=True ) #73, #75
+        # jawChinRaiseD
+        myMult = cmds.createNode( 'multiplyDivide', n='jawChinRaiseD%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 1.0 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.jawChinRaiseD'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myChinRaisePlus+'.input1D[0]', f=True ) #72 #73, #74 #75
+
+        # CTRL_C_mouth_close
+        # mouthLipsTogetherU
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthLipsTogetherU%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.25 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLipsTogetherU'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myChinRaisePlus+'.input1D[1]', f=True ) #72 #73, #74 #75
+        # mouthLipsTogetherD
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthLipsTogetherD%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.25 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLipsTogetherD'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr ( myMult+'.outputX', myChinRaisePlus+'.input1D[2]', f=True ) #72 #73, #74 #75
+
+        # CTRL_C_mouth_purseD
+        # mouthLipsPurseU
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthLipsPurseU%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.528 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLipsPurseU'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr( myMult+'.outputX', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_purse_U'+i, f=True ) #64 #66
+        cmds.connectAttr( myMult+'.outputX', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_purse_U'+i, f=True ) #65 #67
+        # mouthLipsPurseD
+        myMult = cmds.createNode( 'multiplyDivide', n='mouthLipsPurseD%s_mult'%i )
+        cmds.setAttr ( myMult+'.input2X', 0.528 )
+        cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLipsPurseD'+i, myMult+'.input1X', f=True )
+        cmds.connectAttr( myMult+'.outputX', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_purse_D'+i, f=True ) #68 #70
+        cmds.connectAttr( myMult+'.outputX', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_purse_D'+i, f=True ) #69 #71
+        # #
+        # myMult = cmds.createNode( 'multiplyDivide', n='mouthPucker_0.625_mult' )
+        # cmds.setAttr ( myMult+'.input2X', 0.625 )
+        # cmds.connectAttr ( newCon('CTRL_expressions')+'.mouthLipsPurseU'+i, myMult+'.input1X', f=True )
+        # myLipsPlus = 'lips_plus'
+        # cmds.connectAttr ( myMult+'.outputX', myLipsPlus+'.input1D[2]', f=True ) #42 #43 #44 #45 #46 #47 #48 #49
+
+    # center
+    # CTRL_C_jaw
+    cmds.connectAttr( newCon('CTRL_expressions')+'.jawOpen', newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_jawOpen', f=True ) #76
+    cmds.connectAttr( newCon('CTRL_expressions')+'.jawOpen', newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_jawOpen', f=True ) #77
+
+def headShaderConnect():
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_browsDown_L', 'shader_head_shader.maskWeight_00', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_browsDown_L', 'shader_head_shader.maskWeight_01', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_browsDown_R', 'shader_head_shader.maskWeight_02', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_browsDown_R', 'shader_head_shader.maskWeight_03', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_browsLateral_L', 'shader_head_shader.maskWeight_04', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_browsLateral_L', 'shader_head_shader.maskWeight_05', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_browsLateral_R', 'shader_head_shader.maskWeight_06', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_browsLateral_R', 'shader_head_shader.maskWeight_07', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_browsRaiseInner_L', 'shader_head_shader.maskWeight_08', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_browsRaiseInner_L', 'shader_head_shader.maskWeight_09', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_browsRaiseInner_R', 'shader_head_shader.maskWeight_10', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_browsRaiseInner_R', 'shader_head_shader.maskWeight_11', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_browsRaiseOuter_L', 'shader_head_shader.maskWeight_12', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_browsRaiseOuter_L', 'shader_head_shader.maskWeight_13', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_browsRaiseOuter_R', 'shader_head_shader.maskWeight_14', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_browsRaiseOuter_R', 'shader_head_shader.maskWeight_15', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_blink_L', 'shader_head_shader.maskWeight_16', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_squintInner_L', 'shader_head_shader.maskWeight_17', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_blink_L', 'shader_head_shader.maskWeight_18', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_squintInner_L', 'shader_head_shader.maskWeight_19', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_blink_R', 'shader_head_shader.maskWeight_20', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_squintInner_R', 'shader_head_shader.maskWeight_21', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_blink_R', 'shader_head_shader.maskWeight_22', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_squintInner_R', 'shader_head_shader.maskWeight_23', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseInner_L', 'shader_head_shader.maskWeight_24', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseOuter_L', 'shader_head_shader.maskWeight_25', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseUpper_L', 'shader_head_shader.maskWeight_26', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseInner_L', 'shader_head_shader.maskWeight_27', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseOuter_L', 'shader_head_shader.maskWeight_28', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseUpper_L', 'shader_head_shader.maskWeight_29', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseInner_R', 'shader_head_shader.maskWeight_30', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseOuter_R', 'shader_head_shader.maskWeight_31', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_cheekRaiseUpper_R', 'shader_head_shader.maskWeight_32', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseInner_R', 'shader_head_shader.maskWeight_33', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseOuter_R', 'shader_head_shader.maskWeight_34', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_cheekRaiseUpper_R', 'shader_head_shader.maskWeight_35', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_noseWrinkler_L', 'shader_head_shader.maskWeight_36', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_noseWrinkler_L', 'shader_head_shader.maskWeight_37', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_noseWrinkler_R', 'shader_head_shader.maskWeight_38', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_noseWrinkler_R', 'shader_head_shader.maskWeight_39', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_smile_L', 'shader_head_shader.maskWeight_40', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_smile_L', 'shader_head_shader.maskWeight_41', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_UL', 'shader_head_shader.maskWeight_42', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_UR', 'shader_head_shader.maskWeight_43', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_DL', 'shader_head_shader.maskWeight_44', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm13_lips_DR', 'shader_head_shader.maskWeight_45', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_UL', 'shader_head_shader.maskWeight_46', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_UR', 'shader_head_shader.maskWeight_47', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_DL', 'shader_head_shader.maskWeight_48', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm13_lips_DR', 'shader_head_shader.maskWeight_49', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm3_smile_R', 'shader_head_shader.maskWeight_50', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm3_smile_R', 'shader_head_shader.maskWeight_51', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm13_lips_UL', 'shader_head_shader.maskWeight_52', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm13_lips_DL', 'shader_head_shader.maskWeight_53', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm13_lips_UL', 'shader_head_shader.maskWeight_54', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm13_lips_DL', 'shader_head_shader.maskWeight_55', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm13_lips_UR', 'shader_head_shader.maskWeight_56', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm3_color_head_wm13_lips_DR', 'shader_head_shader.maskWeight_57', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm13_lips_UR', 'shader_head_shader.maskWeight_58', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm3_normal_head_wm13_lips_DR', 'shader_head_shader.maskWeight_59', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_mouthStretch_L', 'shader_head_shader.maskWeight_60', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_mouthStretch_L', 'shader_head_shader.maskWeight_61', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_mouthStretch_R', 'shader_head_shader.maskWeight_62', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_mouthStretch_R', 'shader_head_shader.maskWeight_63', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_purse_UL', 'shader_head_shader.maskWeight_64', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_purse_UL', 'shader_head_shader.maskWeight_65', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_purse_UR', 'shader_head_shader.maskWeight_66', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_purse_UR', 'shader_head_shader.maskWeight_67', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_purse_DL', 'shader_head_shader.maskWeight_68', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_purse_DL', 'shader_head_shader.maskWeight_69', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_purse_DR', 'shader_head_shader.maskWeight_70', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_purse_DR', 'shader_head_shader.maskWeight_71', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_chinRaise_L', 'shader_head_shader.maskWeight_72', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_chinRaise_L', 'shader_head_shader.maskWeight_73', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_chinRaise_R', 'shader_head_shader.maskWeight_74', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_chinRaise_R', 'shader_head_shader.maskWeight_75', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm1_color_head_wm1_jawOpen', 'shader_head_shader.maskWeight_76', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm1_normal_head_wm1_jawOpen', 'shader_head_shader.maskWeight_77', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_neckStretch_L', 'shader_head_shader.maskWeight_78', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_neckStretch_L', 'shader_head_shader.maskWeight_79', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_neckStretch_R', 'shader_head_shader.maskWeight_80', f=True )
+    cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_neckStretch_R', 'shader_head_shader.maskWeight_81', f=True )
 
 def connectBlendShape2UI():
-    connectExp('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkL', 'EyeBlinkLeft')
-    connectExp('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeWidenL', 'EyeWideLeft')
-    connectExp('CTRL_L_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerL', 'EyeSquintLeft')
-    connectExp('CTRL_L_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseL', 'CheekSquintLeft')
-
-    connectExp('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkR', 'EyeBlinkRight')
-    connectExp('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeWidenR', 'EyeWideRight')
-    connectExp('CTRL_R_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerR', 'EyeSquintRight')
-    connectExp('CTRL_R_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseR', 'CheekSquintRight')
-
-    connectEye()
-    # eyeConnect()
-
-    # plusConnect('CTRL_L_eye_blink', 'ty', 'EyeBlinkLeft')
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookDownLeft', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookInLeft', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeLookOutLeft', 1)
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeLookUpLeft', 1)
-    # plusConnect('CTRL_L_eye_squintInner', 'ty', 'EyeSquintLeft')
-    # minusConnect('CTRL_L_eye_blink', 'ty', 'EyeWideLeft')
-    #
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeBlinkLookDownLeft', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeBlinkLookInLeft', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'tx', 'EyeBlinkLookOutLeft', 1)
-    # multiConnect('CTRL_C_eye', 'CTRL_L_eye', 'ty', 'EyeBlinkLookUpLeft', 1)
-    #
-    # plusConnect('CTRL_R_eye_blink', 'ty', 'EyeBlinkRight')
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookDownRight', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookInRight', 1)
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeLookOutRight', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeLookUpRight', 1)
-    # plusConnect('CTRL_R_eye_squintInner', 'ty', 'EyeSquintRight')
-    # minusConnect('CTRL_R_eye_blink', 'ty', 'EyeWideRight')
-    #
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeBlinkLookDownRight', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeBlinkLookInRight', 1)
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'tx', 'EyeBlinkLookOutRight', -1)
-    # multiConnect('CTRL_C_eye', 'CTRL_R_eye', 'ty', 'EyeBlinkLookUpRight', 1)
-    #
-    # minusConnect('CTRL_C_jaw_fwdBack', 'ty', 'JawForward')
-    # minusConnect('CTRL_C_jaw', 'tx', 'JawLeft')
-    # plusConnect('CTRL_C_jaw', 'tx', 'JawRight')
-    # plusConnect('CTRL_C_jaw', 'ty', 'JawOpen')
-    #
-    # plusConnect('CTRL_C_mouth_funnelD', 'ty', 'MouthFunnel')
-    # plusConnect('CTRL_C_mouth_purseD', 'ty', 'MouthPucker')
-    #
-    # plusConnect('CTRL_C_mouth', 'ty', 'MouthLeft')
-    # minusConnect('CTRL_C_mouth', 'ty', 'MouthRight')
-    # plusConnect('CTRL_L_mouth_cornerPull', 'ty', 'MouthSmileLeft')
-    # plusConnect('CTRL_R_mouth_cornerPull', 'ty', 'MouthSmileRight')
-    # plusConnect('CTRL_L_mouth_cornerDepress', 'ty', 'MouthFrownLeft')
-    # plusConnect('CTRL_R_mouth_cornerDepress', 'ty', 'MouthFrownRight')
-    # plusConnect('CTRL_L_mouth_dimple', 'ty', 'MouthDimpleLeft')
-    # plusConnect('CTRL_R_mouth_dimple', 'ty', 'MouthDimpleRight')
-    # plusConnect('CTRL_L_mouth_stretch', 'ty', 'MouthStretchLeft')
-    # plusConnect('CTRL_R_mouth_stretch', 'ty', 'MouthStretchRight')
-    # plusConnect('CTRL_C_mouth_lipsRollD', 'ty', 'MouthRollLower')
-    # plusConnect('CTRL_C_mouth_lipsRollU', 'ty', 'MouthRollUpper')
-    # plusConnect('CTRL_C_jaw_ChinRaiseD', 'ty', 'MouthShrugLower')
-    # plusConnect('CTRL_C_jaw_ChinRaiseU', 'ty', 'MouthShrugUpper')
-    # plusConnect('CTRL_L_mouth_press', 'ty', 'MouthPressLeft')
-    # plusConnect('CTRL_R_mouth_press', 'ty', 'MouthPressRight')
-    # plusConnect('CTRL_L_mouth_lowerLipDepress', 'ty', 'MouthLowerDownLeft')
-    # plusConnect('CTRL_R_mouth_lowerLipDepress', 'ty', 'MouthLowerDownRight')
-    # plusConnect('CTRL_L_mouth_upperLipRaise', 'ty', 'MouthUpperUpLeft')
-    # plusConnect('CTRL_R_mouth_upperLipRaise', 'ty', 'MouthUpperUpRight')
-    # plusConnect('CTRL_C_mouth_close', 'ty', 'MouthClose')
-    #
-    # plusConnect('CTRL_L_brow_down', 'ty', 'BrowDownLeft')
-    # plusConnect('CTRL_R_brow_down', 'ty', 'BrowDownRight')
-    # plusConnect('CTRL_L_brow_raiseOut', 'ty', 'BrowOuterUpLeft')
-    # plusConnect('CTRL_R_brow_raiseOut', 'ty', 'BrowOuterUpRight')
-    # plusConnect('CTRL_C_brow_raiseIn', 'ty', 'BrowInnerUp')
-    #
-    # plusConnect('CTRL_L_eye_cheekRaise', 'ty', 'CheekSquintLeft')
-    # plusConnect('CTRL_R_eye_cheekRaise', 'ty', 'CheekSquintRight')
-    # plusConnect('CTRL_C_mouth_suckBlow', 'ty', 'CheekPuff')
-    #
-    # plusConnect('CTRL_L_nose', 'ty', 'NoseSneerLeft')
-    # plusConnect('CTRL_R_nose', 'ty', 'NoseSneerRight')
+    eyeConnect()
+    jawConnect()
+    mouthConnect()
+    browConnect()
+    cheekConnect()
+    noseConnect()
+    multipliersConnect()
+    headShaderConnect()

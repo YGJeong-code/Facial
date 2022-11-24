@@ -18,7 +18,7 @@ class YG_Facial(object):
         if cmds.window(self.myWin, ex=True):
             cmds.deleteUI(self.myWin)
 
-        self.myWin = cmds.window(self.myWin, t=self.myWin+'_v1.0', sizeable=True, resizeToFitChildren=True)
+        self.myWin = cmds.window(self.myWin, t=self.myWin+'_v1.2', sizeable=True, resizeToFitChildren=True)
         self.myColor = {'red':[0.6,0,0],'orange':[0.6, 0.2, 0],'yellow':[0.7, 0.6, 0.1],'green':[0.4, 0.6, 0.1]}
 
         ## up axis
@@ -37,6 +37,8 @@ class YG_Facial(object):
         self.targetFrame = cmds.frameLayout( label='Target', collapsable=True, collapse=False, bgc=self.myColor['orange'], cc=self.winResize, ec=self.winResize)
         cmds.columnLayout( adjustableColumn=1, p=self.targetFrame )
         cmds.button(label='make ARKit target', w=self.size*2, c=self.makeARKitTargetBtn)
+        cmds.button(label='connect UI', w=self.size*2, c=self.connectUIBtn)
+        cmds.button(label='delete MetaHuman', w=self.size*2, c=self.deleteMetaHumanBtn)
         cmds.setParent( '..' )
         cmds.setParent( '..' )
 
@@ -154,6 +156,14 @@ class YG_Facial(object):
                 cmds.setAttr('root_drv.rx', 0)
                 cmds.setAttr('headRig_grp.rx', 0)
                 cmds.setAttr('Lights.rx', 0)
+
+    def deleteMetaHumanBtn(self, *args):
+        cmds.delete('DHIhead:spine_04','DHIbody:root','root_drv','rig','Body_joints','FacialControls','polySurface1','PSD')
+        cmds.setAttr('Default.tx', 0)
+        cmds.setAttr('CTRL_faceGUI.tx', 20)
+
+    def connectUIBtn(self, *args):
+        ARKit.connectBlendShape2UI()
 
     ############################################################################################################################################################################################################################
     # window resize
