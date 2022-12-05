@@ -184,6 +184,7 @@ def eyeBlinkConnect(target, exp, blink):
     cmds.connectAttr (myCond+'.outColorR', myMult+'.input1X', f=True)
     cmds.connectAttr (newCon('CTRL_expressions')+'.'+blink, myMult+'.input2X', f=True)
     cmds.connectAttr (myMult+'.outputX', 'BS_ARKit.'+target, f=True)
+    # eyeBlinkConnect('EyeBlinkLookDownLeft', 'eyeLookDownL', 'eyeBlinkL')
 
 def eyeConnect():
     # basic connect
