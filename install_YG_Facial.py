@@ -3,7 +3,8 @@ import maya.mel as mel
 
 gShelfTopLevel = mel.eval("$tmpVar=$gShelfTopLevel")
 myTap = cmds.tabLayout(gShelfTopLevel, query=True, selectTab=True)
-myCommand = '''import Facial.module.YG_Facial
+myCommand = '''from importlib import reload
+import Facial.module.YG_Facial
 reload(Facial.module.YG_Facial)'''
 usd = cmds.internalVar(usd=True)
 mayascripts = '%s/%s' % (usd.rsplit('/', 3)[0], 'scripts/')
@@ -13,5 +14,3 @@ cmds.shelfButton(command=myCommand,
                  label='YG_Facial',
                  image=tempPath+'YG_Facial.bmp',
                  parent=myTap)
-
-

@@ -1,5 +1,6 @@
 import maya.cmds as cmds
 import Facial.module.YG_Facial_ARKit as ARKit
+from importlib import reload
 reload(ARKit)
 
 #class
@@ -169,11 +170,11 @@ class YG_Facial(object):
     # window resize
     ############################################################################################################################################################################################################################
     def winResize(self, *args):
-        cmds.window(self.myWin, e=True, w=50L, h=50L)
+        cmds.window(self.myWin, e=True, w=50, h=50)
 
     def getsize(self, *args):
         size = cmds.window(self.myWin, q=True, widthHeight=True)
-        print size
+        print (size)
 
 myClass = YG_Facial()
 myClass.winResize()
