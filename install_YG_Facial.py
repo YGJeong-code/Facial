@@ -3,7 +3,7 @@ import maya.mel as mel
 
 gShelfTopLevel = mel.eval("$tmpVar=$gShelfTopLevel")
 myTap = cmds.tabLayout(gShelfTopLevel, query=True, selectTab=True)
-myCommand = '''from importlib import reload
+myCommand = '''from imp import reload
 import Facial.module.YG_Facial
 reload(Facial.module.YG_Facial)'''
 usd = cmds.internalVar(usd=True)

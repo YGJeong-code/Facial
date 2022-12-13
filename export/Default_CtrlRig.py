@@ -4489,4 +4489,4 @@ def create_control_rig():
 	blueprint.get_controller_by_name('RigVMModel').set_reroute_compactness_by_name('RerouteNode_3', True)
 	blueprint.get_controller_by_name('RigVMModel').set_reroute_compactness_by_name('RerouteNode_3_1', True)
 	blueprint.set_preview_mesh(unreal.load_object(name='/Game/Characters/Guy/Default.Default', outer=None))
-create_control_rig()
+# create_control_rig()

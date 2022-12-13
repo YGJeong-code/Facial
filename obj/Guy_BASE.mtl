@@ -4,7 +4,49 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 0.00
+newmtl CHA_PCM_Head_Head001_Beard_LOD1SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Beard_LOD2SG4
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
 newmtl CHA_PCM_Head_Head001_Eye_L_LOD0SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_L_LOD1SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_L_LOD2SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_L_LOD3SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_L_LOD4SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_L_LOD5SG2
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
@@ -16,7 +58,49 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_R_LOD1SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_R_LOD2SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_R_LOD3SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_R_LOD4SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eye_R_LOD5SG2
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
 newmtl CHA_PCM_Head_Head001_Eyebrow_LOD0SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eyebrow_LOD1SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eyebrow_LOD2SG3
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
@@ -28,7 +112,49 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eyelash_LOD1SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Eyelash_LOD2SG3
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
 newmtl CHA_PCM_Head_Head001_LOD0_ncl1_1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_LOD1_ncl1_1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_LOD2_ncl1_1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_LOD3_ncl1_1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_LOD4_ncl1_1SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_LOD5_ncl1_1SG
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
@@ -40,129 +166,43 @@ Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 0.00
-newmtl GUI2D_black_shaderSG
+newmtl CHA_PCM_Head_Head001_Teeth_LOD1SG1
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl GUI2D_orange_shaderSG
+Ni 0.00
+newmtl CHA_PCM_Head_Head001_Teeth_LOD2SG1
 illum 4
-Kd 1.00 0.58 0.00
+Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl GUI2D_yellow_shaderSG
-illum 4
-Kd 1.00 1.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl GUI_shader_yellowSG
-illum 4
-Kd 1.00 1.00 0.00
-Ka 1.00 1.00 1.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl eyeIn
+Ni 0.00
+newmtl inner_eye
 illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 1.00
 Ks 0.50 0.50 0.50
-newmtl initialShadingGroup
-illum 4
-Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl lambert2SG
-illum 4
-Kd 1.00 0.00 0.00
-Ka 1.00 1.00 1.00
-Tf 1.00 1.00 1.00
-Ni 1.00
-newmtl mouthIn
+newmtl inner_mouth
 illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 1.00
 Ks 0.50 0.50 0.50
-newmtl noseIn
+newmtl inner_nose
 illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
 Ni 1.00
 Ks 0.50 0.50 0.50
-newmtl shader_body_shaderSG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 0.00
-newmtl shader_eyeEdge_shaderSG
+newmtl outer_neck
 illum 4
 Kd 0.50 0.50 0.50
 Ka 0.00 0.00 0.00
-Tf 0.10 0.10 0.10
-Ni 1.00
-Ks 0.25 0.25 0.25
-newmtl shader_eyeLeft_shaderSG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-Ni 0.00
-newmtl shader_eyeRight_shaderSG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 0.00
-newmtl shader_eyelashes_shaderSG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd eyelashes_color_map.tga
-Ni 1.00
-Ks 0.25 0.25 0.25
-newmtl shader_eyeshell_shaderSG
-illum 4
-Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 0.03 0.03 0.03
-Ni 1.00
-Ks 0.25 0.25 0.25
-newmtl shader_flipflop_shaderSG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-map_Kd flippflops_baseColor3.tga
-bump  -bm 1 shs_flipflops_N.TGA
 Ni 1.00
 Ks 0.50 0.50 0.50
-Ns 18.00
-newmtl shader_head_shaderSG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 0.00
-newmtl shader_saliva_shaderSG
-illum 4
-Kd 0.50 0.50 0.50
-Ka 0.00 0.00 0.00
-Tf 0.10 0.10 0.10
-Ni 1.00
-Ks 0.25 0.25 0.25
-newmtl shader_teeth_shaderSG
-illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
-Tf 1.00 1.00 1.00
-Ni 0.00

@@ -1,6 +1,6 @@
 import maya.cmds as cmds
 import Facial.module.YG_Facial_ARKit as ARKit
-from importlib import reload
+from imp import reload
 reload(ARKit)
 
 #class
@@ -14,6 +14,10 @@ class YG_Facial(object):
         self.myUpAxis = cmds.upAxis( q=True, axis=True )
         if self.myUpAxis == 'z':
             cmds.radioButton(self.upAxisZBtn, e=True, select=True)
+
+        # assign target head
+        if cmds.objExists('head_lod0_mesh'):
+            cmds.textFieldButtonGrp('targetHeadAssign', e=True, text='head_lod0_mesh')
 
     def createWindow(self):
         if cmds.window(self.myWin, ex=True):
@@ -37,6 +41,9 @@ class YG_Facial(object):
         cmds.columnLayout( adjustableColumn=True, p=self.myWin )
         self.targetFrame = cmds.frameLayout( label='Target', collapsable=True, collapse=False, bgc=self.myColor['orange'], cc=self.winResize, ec=self.winResize)
         cmds.columnLayout( adjustableColumn=1, p=self.targetFrame )
+        cmds.textFieldButtonGrp('targetHeadAssign', label='Target Head : ', text='text', buttonLabel='Assign', editable=False, adjustableColumn=2, columnAlign=(1,'left'), columnWidth=(2,130), bc=self.assignTargetHeadBtn )
+        cmds.checkBox('combineHeadGrp', label='Combine Head Group', v=True )
+        cmds.checkBox('deleteTargetCheck', label='Delete Target', v=True )
         cmds.button(label='make ARKit target', w=self.size*2, c=self.makeARKitTargetBtn)
         cmds.button(label='connect UI', w=self.size*2, c=self.connectUIBtn)
         cmds.button(label='delete MetaHuman', w=self.size*2, c=self.deleteMetaHumanBtn)
@@ -165,6 +172,10 @@ class YG_Facial(object):
 
     def connectUIBtn(self, *args):
         ARKit.connectBlendShape2UI()
+
+    def assignTargetHeadBtn(self, *args):
+        mySel = cmds.ls(sl=True)[0]
+        cmds.textFieldButtonGrp('targetHeadAssign', e=True, text=mySel)
 
     ############################################################################################################################################################################################################################
     # window resize

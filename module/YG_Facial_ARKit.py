@@ -1,7 +1,7 @@
 import maya.cmds as cmds
 import maya.mel as mel
 import Facial.module.YG_Facial_ARKitDict as ARKitDict
-from importlib import reload
+from imp import reload
 reload(ARKitDict)
 
 def makeCorrectiveShape(target, pose):
@@ -26,10 +26,14 @@ def makeCorrectiveShape(target, pose):
 # makeCorrectiveShape('MouthClose', 'JawOpen')
 
 def duplicateLODGroup():
-    # lod0
-    myList = cmds.listRelatives('head_lod0_grp', c=True)
-    myMesh = cmds.polyUniteSkinned( myList, ch=0 )
-    ARKitDict.myMesh = myMesh[0]
+    if cmds.checkBox('combineHeadGrp', q=True, v=True ):
+        # combine mesh
+        myList = cmds.listRelatives('head_lod0_grp', c=True)
+        myMesh = cmds.polyUniteSkinned( myList, ch=0 )
+        ARKitDict.myMesh = myMesh[0]
+    else:
+    # head only
+        ARKitDict.myMesh = cmds.textFieldButtonGrp('targetHeadAssign', q=True, text=True )
 
     # target group
     ARKitDict.myTargetGrp = cmds.group(em=True, n='target_grp')
@@ -42,6 +46,9 @@ def duplicateLODGroup():
 
         if target != 'Default':
             cmds.parent(target, ARKitDict.myTargetGrp)
+        else:
+            if bool(cmds.listRelatives(target, p=True)):
+                cmds.parent(target, world=True)
 
     # mouth close
     makeCorrectiveShape('MouthClose', 'JawOpen')
@@ -64,8 +71,9 @@ def duplicateLODGroup():
     # blendShape
     myTargetList = cmds.listRelatives(ARKitDict.myTargetGrp, c=True)
     cmds.blendShape( myTargetList, 'Default', n='BS_ARKit' )
-    cmds.delete(ARKitDict.myTargetGrp)
-    # cmds.hide(myMesh)
+
+    if cmds.checkBox('deleteTargetCheck', q=True, v=True ):
+        cmds.delete(ARKitDict.myTargetGrp)
 
     makePose('Default')
 
