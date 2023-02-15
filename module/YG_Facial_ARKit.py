@@ -5,6 +5,8 @@ from imp import reload
 reload(ARKitDict)
 
 def makeCorrectiveShape(target, pose):
+    print (target)
+
     # mouth close
     makePose('Default')
     myHead = cmds.duplicate(ARKitDict.myMesh)
@@ -41,6 +43,8 @@ def duplicateLODGroup():
 
     # make pose & duplicate
     for target in ARKitDict.myList:
+        print (target)
+
         makePose(target)
         cmds.duplicate(ARKitDict.myMesh, n=target, rc=True)
 
@@ -70,6 +74,7 @@ def duplicateLODGroup():
 
     # blendShape
     myTargetList = cmds.listRelatives(ARKitDict.myTargetGrp, c=True)
+    # cmds.blendShape( myTargetList, ARKitDict.myMesh, n='BS_ARKit' )
     cmds.blendShape( myTargetList, 'Default', n='BS_ARKit' )
 
     if cmds.checkBox('deleteTargetCheck', q=True, v=True ):
@@ -480,6 +485,30 @@ def noseConnect():
     connectExp('CTRL_R_nose', 'ty', 'CTRL_expressions_noseNostrilDilateR')
     cmds.connectAttr ( newCon('CTRL_R_nose')+'.ty', 'BS_ARKit.NoseSneerRight', f=True )
 
+def tongueConnect():
+    connectExp(newCon('CTRL_C_tongue_inOut'), 'ty', 'CTRL_expressions_tongueIn')
+    connectExp(newCon('CTRL_C_tongue_inOut'), 'ty', 'CTRL_expressions_tongueOut')
+
+    connectExp(newCon('CTRL_C_tongue_narrowWide'), 'ty', 'CTRL_expressions_tongueNarrow')
+    connectExp(newCon('CTRL_C_tongue_narrowWide'), 'ty', 'CTRL_expressions_tongueWide')
+
+    connectExp(newCon('CTRL_C_tongue_press'), 'ty', 'CTRL_expressions_tonguePress')
+
+    connectExp(newCon('CTRL_C_tongue_roll'), 'ty', 'CTRL_expressions_tongueRollUp')
+    connectExp(newCon('CTRL_C_tongue_roll'), 'ty', 'CTRL_expressions_tongueRollDown')
+    connectExp(newCon('CTRL_C_tongue_roll'), 'tx', 'CTRL_expressions_tongueRollLeft')
+    connectExp(newCon('CTRL_C_tongue_roll'), 'tx', 'CTRL_expressions_tongueRollRight')
+
+    connectExp(newCon('CTRL_C_tongue_tip'), 'ty', 'CTRL_expressions_tongueTipUp')
+    connectExp(newCon('CTRL_C_tongue_tip'), 'ty', 'CTRL_expressions_tongueTipDown')
+    connectExp(newCon('CTRL_C_tongue_tip'), 'tx', 'CTRL_expressions_tongueTipLeft')
+    connectExp(newCon('CTRL_C_tongue_tip'), 'tx', 'CTRL_expressions_tongueTipRight')
+
+    connectExp(newCon('CTRL_C_tongue'), 'ty', 'CTRL_expressions_tongueUp')
+    connectExp(newCon('CTRL_C_tongue'), 'ty', 'CTRL_expressions_tongueDown')
+    connectExp(newCon('CTRL_C_tongue'), 'tx', 'CTRL_expressions_tongueLeft')
+    connectExp(newCon('CTRL_C_tongue'), 'tx', 'CTRL_expressions_tongueRight')
+
 def multipliersConnect():
     mySide = ['L','R']
     for i in mySide:
@@ -825,4 +854,6 @@ def connectBlendShape2UI():
     cheekConnect()
     noseConnect()
     multipliersConnect()
-    headShaderConnect()
+
+    if cmds.checkBox('shaderCheck', q=True, v=True ):
+        headShaderConnect()

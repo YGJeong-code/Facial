@@ -26,7 +26,7 @@ def set_sk_materials(path_to_sk, materials_to_change):
     skeletal_mesh.set_editor_property("materials", material_array)
 
 def assign_material():
-    path_to_sk = '/Game/Characters/Guy/Default'
+    path_to_sk = '/Game/Characters/Tolka/Default'
     shader_head_shader = {'shader_head_shader': unreal.load_asset('/Game/MetaHumans/Guy/Face/Materials/Baked/MI_HeadSynthesized_Baked')}
     shader_teeth_shader = {'shader_teeth_shader': unreal.load_asset('/Game/MetaHumans/Guy/Materials/M_TeethCharacterCreator_Inst')}
     shader_saliva_shader = {'shader_saliva_shader': unreal.load_asset('/Game/MetaHumans/Common/Face/Materials/MI_lacrimal_fluid_Inst')}

@@ -44,9 +44,15 @@ class YG_Facial(object):
         cmds.textFieldButtonGrp('targetHeadAssign', label='Target Head : ', text='text', buttonLabel='Assign', editable=False, adjustableColumn=2, columnAlign=(1,'left'), columnWidth=(2,130), bc=self.assignTargetHeadBtn )
         cmds.checkBox('combineHeadGrp', label='Combine Head Group', v=True )
         cmds.checkBox('deleteTargetCheck', label='Delete Target', v=True )
+
         cmds.button(label='make ARKit target', w=self.size*2, c=self.makeARKitTargetBtn)
+
+        cmds.checkBox('shaderCheck', label='Shader Connect', v=True )
         cmds.button(label='connect UI', w=self.size*2, c=self.connectUIBtn)
+
         cmds.button(label='delete MetaHuman', w=self.size*2, c=self.deleteMetaHumanBtn)
+        cmds.separator()
+        cmds.button(label='skin transfer A to B', w=self.size*2, c=self.skinTransfer)
         cmds.setParent( '..' )
         cmds.setParent( '..' )
 
@@ -166,7 +172,13 @@ class YG_Facial(object):
                 cmds.setAttr('Lights.rx', 0)
 
     def deleteMetaHumanBtn(self, *args):
-        cmds.delete('DHIhead:spine_04','DHIbody:root','root_drv','rig','Body_joints','FacialControls','polySurface1','PSD')
+        cmds.delete('DHIhead:spine_04','DHIbody:root','root_drv','rig','Body_joints','FacialControls','PSD')
+
+        try:
+            cmds.delete('polySurface1')
+        except:
+            pass
+
         cmds.setAttr('Default.tx', 0)
         cmds.setAttr('CTRL_faceGUI.tx', 20)
 
@@ -176,6 +188,27 @@ class YG_Facial(object):
     def assignTargetHeadBtn(self, *args):
         mySel = cmds.ls(sl=True)[0]
         cmds.textFieldButtonGrp('targetHeadAssign', e=True, text=mySel)
+
+    def skinTransfer(self, *args):
+        mySource = cmds.ls(sl=True, l=True)[0]
+        mySourceShape = cmds.listRelatives (mySource, s=True, f=True)[0]
+
+        temp = cmds.listHistory(mySourceShape, lv=True)
+        mySkinJNT = []
+        for i in temp:
+        	if 'skinCluster' in i:
+        		mySkinJNT = cmds.skinCluster(i,query=True,inf=True)
+
+        myTarget = cmds.ls(sl=True, l=True)[1]
+
+        cmds.select (myTarget, mySkinJNT, r=True)
+        cmds.optionVar(iv=[('multipleBindPosesOpt',1),('bindMethod',1),('bindTo',2),
+                    ('skinMethod',1),('removeUnusedInfluences',0),('colorizeSkeleton',0),
+                    ('maxInfl',3),('normalizeWeights',2),('obeyMaxInfl',0)])
+        cmds.SmoothBindSkin()
+
+        cmds.select (mySource, myTarget, r=True)
+        cmds.copySkinWeights  (noMirror=True, surfaceAssociation='closestPoint', influenceAssociation='closestJoint')
 
     ############################################################################################################################################################################################################################
     # window resize

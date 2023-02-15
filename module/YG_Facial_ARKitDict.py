@@ -118,7 +118,19 @@ myNewDict = {'EyeBlinkLeft':{'CTRL_L_eye_blink':{'ty':1}},
 'CheekSquintRight':{'CTRL_R_eye_cheekRaise':{'ty':1}},
 'NoseSneerLeft':{'CTRL_L_nose':{'ty':1}},
 'NoseSneerRight':{'CTRL_R_nose':{'ty':1}},
-'MouthClose':{'CTRL_C_jaw':{'ty':1},'CTRL_C_mouth_close':{'ty':1}}
+'MouthClose':{'CTRL_C_jaw':{'ty':1},'CTRL_C_mouth_close':{'ty':1}},
+'EyeBlinkLookDownLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'ty':-1}},
+'EyeBlinkLookInLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'tx':-1}},
+'EyeBlinkLookOutLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'tx':1}},
+'EyeBlinkLookUpLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye':{'ty':1}},
+'EyeBlinkSquintLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye_squintInner':{'ty':1}},
+'EyeBlinkCheekSquintLeft':{'CTRL_L_eye_blink':{'ty':1},'CTRL_L_eye_cheekRaise':{'ty':1}},
+'EyeBlinkLookDownRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'ty':-1}},
+'EyeBlinkLookInRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'tx':1}},
+'EyeBlinkLookOutRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'tx':-1}},
+'EyeBlinkLookUpRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye':{'ty':1}},
+'EyeBlinkSquintRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye_squintInner':{'ty':1}},
+'EyeBlinkCheekSquintRight':{'CTRL_R_eye_blink':{'ty':1},'CTRL_R_eye_cheekRaise':{'ty':1}},
 }
 
 myList = ['Default','EyeBlinkLeft','EyeLookDownLeft','EyeLookInLeft','EyeLookOutLeft',
@@ -132,3 +144,9 @@ myList = ['Default','EyeBlinkLeft','EyeLookDownLeft','EyeLookInLeft','EyeLookOut
         'MouthUpperUpRight','BrowDownLeft','BrowDownRight','BrowInnerUp','BrowOuterUpLeft',
         'BrowOuterUpRight','CheekPuff','CheekSquintLeft','CheekSquintRight','NoseSneerLeft',
         'NoseSneerRight']
+
+etcList = ['Default','EyeBlinkLeft','EyeLookDownLeft','EyeLookInLeft','EyeLookOutLeft',
+        'EyeLookUpLeft','EyeSquintLeft','EyeWideLeft','EyeBlinkRight','EyeLookDownRight',
+        'EyeLookInRight','EyeLookOutRight','EyeLookUpRight','EyeSquintRight','EyeWideRight',
+        'JawForward','JawLeft','JawRight','JawOpen','BrowDownLeft','BrowDownRight','BrowInnerUp','BrowOuterUpLeft',
+        'BrowOuterUpRight','CheekSquintLeft','CheekSquintRight','NoseSneerLeft','NoseSneerRight']
