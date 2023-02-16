@@ -298,17 +298,24 @@ def eyeConnect():
     eyeBlinkConnect('EyeBlinkCheekSquintRight', 'eyeCheekRaiseR', 'eyeBlinkR')
 
 def jawConnect():
-    connectExp('CTRL_C_jaw_fwdBack', 'ty', 'CTRL_expressions_jawFwd')
-    connectExp('CTRL_C_jaw_fwdBack', 'ty', 'CTRL_expressions_jawBack')
+    # CTRL_C_jaw
+    cmds.connectAttr ( newCon('CTRL_C_jaw')+'.tx', 'CTRL_expressions_jawLeft.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_jawLeft.output', 'BS_ARKit.JawLeft', f=True )
+
+    cmds.connectAttr ( newCon('CTRL_C_jaw')+'.tx', 'CTRL_expressions_jawRight.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_jawRight.output', 'BS_ARKit.JawRight', f=True )
+
+    cmds.connectAttr ( newCon('CTRL_C_jaw')+'.ty', 'CTRL_expressions_jawOpen.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_jawOpen.output', 'BS_ARKit.JawOpen', f=True )
+
+    # CTRL_C_jaw_fwdBack
+    cmds.connectAttr ( newCon('CTRL_C_jaw_fwdBack')+'.ty', 'CTRL_expressions_jawFwd.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_jaw_fwdBack')+'.ty', 'CTRL_expressions_jawBack.input', f=True )
 
     myMult = cmds.createNode('multiplyDivide', n='jaw_mult')
     cmds.setAttr(myMult+'.input2X', -1)
     cmds.connectAttr ( newCon('CTRL_C_jaw_fwdBack')+'.ty', myMult+'.input1X', f=True )
     cmds.connectAttr ( myMult+'.outputX', 'BS_ARKit.JawForward', f=True )
-
-    connectExpToTarget('CTRL_C_jaw', 'tx', 'CTRL_expressions_jawLeft', 'JawLeft')
-    connectExpToTarget('CTRL_C_jaw', 'tx', 'CTRL_expressions_jawRight', 'JawRight')
-    connectExpToTarget('CTRL_C_jaw', 'ty', 'CTRL_expressions_jawOpen', 'JawOpen')
 
 def mouthConnect():
     myList = ['UL','UR','DL','DR']
