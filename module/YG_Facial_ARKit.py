@@ -193,61 +193,75 @@ def eyeBlinkConnect(target, exp, blink):
 
     myMult = cmds.createNode('multiplyDivide', n=target+'_mult')
 
-    cmds.connectAttr(newCon('CTRL_expressions')+'.'+exp, myCond+'.colorIfTrueR', f=True)
-    cmds.connectAttr(newCon('CTRL_expressions')+'.'+blink, myCond+'.firstTerm', f=True)
+    cmds.connectAttr(oldCon('CTRL_expressions')+'.'+exp, myCond+'.colorIfTrueR', f=True)
+    cmds.connectAttr(oldCon('CTRL_expressions')+'.'+blink, myCond+'.firstTerm', f=True)
     cmds.connectAttr (myCond+'.outColorR', myMult+'.input1X', f=True)
-    cmds.connectAttr (newCon('CTRL_expressions')+'.'+blink, myMult+'.input2X', f=True)
+    cmds.connectAttr (oldCon('CTRL_expressions')+'.'+blink, myMult+'.input2X', f=True)
     cmds.connectAttr (myMult+'.outputX', 'BS_ARKit.'+target, f=True)
-    # eyeBlinkConnect('EyeBlinkLookDownLeft', 'eyeLookDownL', 'eyeBlinkL')
 
 def eyeConnect():
-    # basic connect
-    connectExpToTarget('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkL', 'EyeBlinkLeft')
-    connectExpToTarget('CTRL_L_eye_blink', 'ty', 'CTRL_expressions_eyeWidenL', 'EyeWideLeft')
-    connectExpToTarget('CTRL_L_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerL', 'EyeSquintLeft')
-    connectExpToTarget('CTRL_L_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseL', 'CheekSquintLeft')
+    # CTRL_C_eye
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.tx', 'animCurveUA1.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.ty', 'animCurveUA2.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.tx', 'animCurveUA3.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_eye')+'.ty', 'animCurveUA4.input', f=True )
 
-    connectExpToTarget('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeBlinkR', 'EyeBlinkRight')
-    connectExpToTarget('CTRL_R_eye_blink', 'ty', 'CTRL_expressions_eyeWidenR', 'EyeWideRight')
-    connectExpToTarget('CTRL_R_eye_squintInner', 'ty', 'CTRL_expressions_eyeSquintInnerR', 'EyeSquintRight')
-    connectExpToTarget('CTRL_R_eye_cheekRaise', 'ty', 'CTRL_expressions_eyeCheekRaiseR', 'CheekSquintRight')
-
-    # detail connect
+    # CTRL_L_eye
     cmds.connectAttr ( newCon('CTRL_L_eye')+'.tx', 'LOC_L_eyeUIDriver_rotateY.input', f=True )
     cmds.connectAttr ( newCon('CTRL_L_eye')+'.ty', 'LOC_L_eyeUIDriver_rotateX.input', f=True )
+
+    # CTRL_R_eye
     cmds.connectAttr ( newCon('CTRL_R_eye')+'.tx', 'LOC_R_eyeUIDriver_rotateY.input', f=True )
     cmds.connectAttr ( newCon('CTRL_R_eye')+'.ty', 'LOC_R_eyeUIDriver_rotateX.input', f=True )
 
-    cmds.connectAttr ( newCon('CTRL_C_eye')+'.tx', 'animCurveUA3.input', f=True )
-    cmds.connectAttr ( newCon('CTRL_C_eye')+'.tx', 'animCurveUA1.input', f=True )
-    cmds.connectAttr ( newCon('CTRL_C_eye')+'.ty', 'animCurveUA2.input', f=True )
-    cmds.connectAttr ( newCon('CTRL_C_eye')+'.ty', 'animCurveUA4.input', f=True )
+    # BS
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookLeftL.output', 'BS_ARKit.EyeLookOutLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookLeftR.output', 'BS_ARKit.EyeLookInRight', f=True )
 
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookLeftL.output', newCon('CTRL_expressions')+'.eyeLookLeftL', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookLeftL', 'BS_ARKit.EyeLookOutLeft', f=True )
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookLeftR.output', newCon('CTRL_expressions')+'.eyeLookLeftR', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookLeftR', 'BS_ARKit.EyeLookInRight', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookRightL.output', 'BS_ARKit.EyeLookInLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookRightR.output', 'BS_ARKit.EyeLookOutRight', f=True )
 
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookRightL.output', newCon('CTRL_expressions')+'.eyeLookRightL', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookRightL', 'BS_ARKit.EyeLookInLeft', f=True )
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookRightR.output', newCon('CTRL_expressions')+'.eyeLookRightR', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookRightR', 'BS_ARKit.EyeLookOutRight', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookUpL.output', 'BS_ARKit.EyeLookUpLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookUpR.output', 'BS_ARKit.EyeLookUpRight', f=True )
 
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookUpL.output', newCon('CTRL_expressions')+'.eyeLookUpL', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookUpL', 'BS_ARKit.EyeLookUpLeft', f=True )
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookUpR.output', newCon('CTRL_expressions')+'.eyeLookUpR', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookUpR', 'BS_ARKit.EyeLookUpRight', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookDownL.output', 'BS_ARKit.EyeLookDownLeft', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeLookDownR.output', 'BS_ARKit.EyeLookDownRight', f=True )
 
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookDownL.output', newCon('CTRL_expressions')+'.eyeLookDownL', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookDownL', 'BS_ARKit.EyeLookDownLeft', f=True )
-    cmds.connectAttr ( 'CTRL_expressions_eyeLookDownR.output', newCon('CTRL_expressions')+'.eyeLookDownR', f=True )
-    cmds.connectAttr ( newCon('CTRL_expressions')+'.eyeLookDownR', 'BS_ARKit.EyeLookDownRight', f=True )
+    # CTRL_L_eye_blink
+    cmds.connectAttr ( newCon('CTRL_L_eye_blink')+'.ty', 'CTRL_expressions_eyeBlinkL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeBlinkL.output', 'BS_ARKit.EyeBlinkLeft', f=True )
+
+    cmds.connectAttr ( newCon('CTRL_L_eye_blink')+'.ty', 'CTRL_expressions_eyeWidenL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeWidenL.output', 'BS_ARKit.EyeWideLeft', f=True )
+
+    # CTRL_R_eye_blink
+    cmds.connectAttr ( newCon('CTRL_R_eye_blink')+'.ty', 'CTRL_expressions_eyeBlinkR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeBlinkR.output', 'BS_ARKit.EyeBlinkRight', f=True )
+
+    cmds.connectAttr ( newCon('CTRL_R_eye_blink')+'.ty', 'CTRL_expressions_eyeWidenR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeWidenR.output', 'BS_ARKit.EyeWideRight', f=True )
+
+    # CTRL_L_eye_squintInner
+    cmds.connectAttr ( newCon('CTRL_L_eye_squintInner')+'.ty', 'CTRL_expressions_eyeSquintInnerL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeSquintInnerL.output', 'BS_ARKit.EyeSquintLeft', f=True )
+
+    # CTRL_R_eye_squintInner
+    cmds.connectAttr ( newCon('CTRL_R_eye_squintInner')+'.ty', 'CTRL_expressions_eyeSquintInnerR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeSquintInnerR.output', 'BS_ARKit.EyeSquintRight', f=True )
+
+    # CTRL_L_eye_cheekRaise
+    cmds.connectAttr ( newCon('CTRL_L_eye_cheekRaise')+'.ty', 'CTRL_expressions_eyeCheekRaiseL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeCheekRaiseL.output', 'BS_ARKit.CheekSquintLeft', f=True )
+
+    # CTRL_R_eye_cheekRaise
+    cmds.connectAttr ( newCon('CTRL_R_eye_cheekRaise')+'.ty', 'CTRL_expressions_eyeCheekRaiseR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_eyeCheekRaiseR.output', 'BS_ARKit.CheekSquintRight', f=True )
 
     # minus eye blink
     myBlinkPlus = cmds.createNode('plusMinusAverage', n='EyeBlinkLeft_plus')
     cmds.setAttr(myBlinkPlus+'.operation', 2)
 
-    cmds.connectAttr(newCon('CTRL_expressions')+'.eyeBlinkL', myBlinkPlus+'.input1D[0]', f=True)
+    cmds.connectAttr(oldCon('CTRL_expressions')+'.eyeBlinkL', myBlinkPlus+'.input1D[0]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookDownLeft', myBlinkPlus+'.input1D[1]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookInLeft', myBlinkPlus+'.input1D[2]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookOutLeft', myBlinkPlus+'.input1D[3]', f=True)
@@ -259,7 +273,7 @@ def eyeConnect():
     myBlinkPlus = cmds.createNode('plusMinusAverage', n='EyeBlinkRight_plus')
     cmds.setAttr(myBlinkPlus+'.operation', 2)
 
-    cmds.connectAttr(newCon('CTRL_expressions')+'.eyeBlinkR', myBlinkPlus+'.input1D[0]', f=True)
+    cmds.connectAttr(oldCon('CTRL_expressions')+'.eyeBlinkR', myBlinkPlus+'.input1D[0]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookDownRight', myBlinkPlus+'.input1D[1]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookInRight', myBlinkPlus+'.input1D[2]', f=True)
     cmds.connectAttr ('BS_ARKit.EyeBlinkLookOutRight', myBlinkPlus+'.input1D[3]', f=True)
@@ -282,10 +296,6 @@ def eyeConnect():
     eyeBlinkConnect('EyeBlinkLookUpRight', 'eyeLookUpR', 'eyeBlinkR')
     eyeBlinkConnect('EyeBlinkSquintRight', 'eyeSquintInnerR', 'eyeBlinkR')
     eyeBlinkConnect('EyeBlinkCheekSquintRight', 'eyeCheekRaiseR', 'eyeBlinkR')
-
-    # grp
-    cmds.delete(newCon('headRigging_grp'))
-    cmds.parent(oldCon('headRigging_grp'), newCon('headRig_grp'))
 
 def jawConnect():
     connectExp('CTRL_C_jaw_fwdBack', 'ty', 'CTRL_expressions_jawFwd')
@@ -853,6 +863,7 @@ def connectBlendShape2UI():
     browConnect()
     cheekConnect()
     noseConnect()
+    tongueConnect()
     multipliersConnect()
 
     if cmds.checkBox('shaderCheck', q=True, v=True ):

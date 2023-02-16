@@ -4489,4 +4489,4 @@ def create_control_rig(ch_folder, ch_name):
 	blueprint.get_controller_by_name('RigVMModel').set_reroute_compactness_by_name('RerouteNode_3', True)
 	blueprint.get_controller_by_name('RigVMModel').set_reroute_compactness_by_name('RerouteNode_3_1', True)
 	blueprint.set_preview_mesh(unreal.load_object(name='/Game/Characters/'+ch_foler+'/'+ch_name+'.'+ch_name, outer=None))
-create_control_rig('Test/ART/RIG/YeonGyunJeong/Tolka/v02', 'Tolka_Face_jointBase')
+create_control_rig('Test/ART/RIG/YeonGyunJeong/Tolka/blendBase/v03', 'Tolka_blendBase_VRND_v03')
