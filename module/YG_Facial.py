@@ -23,7 +23,7 @@ class YG_Facial(object):
         if cmds.window(self.myWin, ex=True):
             cmds.deleteUI(self.myWin)
 
-        self.myWin = cmds.window(self.myWin, t=self.myWin+'_v1.2', sizeable=True, resizeToFitChildren=True)
+        self.myWin = cmds.window(self.myWin, t=self.myWin+'_v1.3', sizeable=True, resizeToFitChildren=True)
         self.myColor = {'red':[0.6,0,0],'orange':[0.6, 0.2, 0],'yellow':[0.7, 0.6, 0.1],'green':[0.4, 0.6, 0.1]}
 
         ## up axis

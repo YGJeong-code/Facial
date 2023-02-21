@@ -318,9 +318,98 @@ def jawConnect():
     cmds.connectAttr ( myMult+'.outputX', 'BS_ARKit.JawForward', f=True )
 
 def mouthConnect():
-    myList = ['UL','UR','DL','DR']
-    # mouthFunnel
-    cmds.connectAttr ( newCon('CTRL_C_mouth_funnelD')+'.ty', 'BS_ARKit.MouthFunnel', f=True )
+    # CTRL_C_jaw_ChinRaiseD
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'CTRL_expressions_jawChinRaiseDL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'CTRL_expressions_jawChinRaiseDR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'BS_ARKit.MouthShrugLower', f=True )
+
+    # CTRL_C_jaw_ChinRaiseU
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU.ty', 'CTRL_expressions_jawChinRaiseUL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU.ty', 'CTRL_expressions_jawChinRaiseUR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU.ty', 'BS_ARKit.MouthShrugUpper', f=True )
+
+    # CTRL_C_mouth
+    cmds.connectAttr ( newCon('CTRL_C_mouth')+'.tx', 'CTRL_expressions_mouthLeft.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthLeft.output', 'BS_ARKit.MouthLeft', f=True )
+
+    cmds.connectAttr ( newCon('CTRL_C_mouth')+'.tx', 'CTRL_expressions_mouthRight.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthRight.output', 'BS_ARKit.MouthRight', f=True )
+
+    # CTRL_L_mouth_upperLipRaise
+    cmds.connectAttr ( newCon('CTRL_L_mouth_upperLipRaise')+'.ty', 'CTRL_expressions_mouthUpperLipRaiseL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthUpperLipRaiseL.output', 'BS_ARKit.MouthUpperUpLeft', f=True )
+
+    # CTRL_R_mouth_upperLipRaise
+    cmds.connectAttr ( newCon('CTRL_R_mouth_upperLipRaise')+'.ty', 'CTRL_expressions_mouthUpperLipRaiseR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthUpperLipRaiseR.output', 'BS_ARKit.MouthUpperUpRight', f=True )
+
+    # CTRL_L_mouth_cornerPull
+    cmds.connectAttr ( newCon('CTRL_L_mouth_cornerPull')+'.ty', 'CTRL_expressions_mouthCornerPullL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthCornerPullL.output', 'BS_ARKit.MouthSmileLeft', f=True )
+
+    # CTRL_R_mouth_cornerPull
+    cmds.connectAttr ( newCon('CTRL_R_mouth_cornerPull')+'.ty', 'CTRL_expressions_mouthCornerPullR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthCornerPullR.output', 'BS_ARKit.MouthSmileRight', f=True )
+
+    # CTRL_L_mouth_dimple
+    cmds.connectAttr ( newCon('CTRL_L_mouth_dimple')+'.ty', 'CTRL_expressions_mouthDimpleL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthDimpleL.output', 'BS_ARKit.MouthDimpleLeft', f=True )
+
+    # CTRL_R_mouth_dimple
+    cmds.connectAttr ( newCon('CTRL_R_mouth_dimple')+'.ty', 'CTRL_expressions_mouthDimpleR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthDimpleR.output', 'BS_ARKit.MouthDimpleRight', f=True )
+
+    # CTRL_L_mouth_cornerDepress
+    cmds.connectAttr ( newCon('CTRL_L_mouth_cornerDepress')+'.ty', 'CTRL_expressions_mouthCornerDepressL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthCornerDepressL.output', 'BS_ARKit.MouthFrownLeft', f=True )
+
+    # CTRL_R_mouth_cornerDepress
+    cmds.connectAttr ( newCon('CTRL_R_mouth_cornerDepress')+'.ty', 'CTRL_expressions_mouthCornerDepressR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthCornerDepressR.output', 'BS_ARKit.MouthFrownRight', f=True )
+
+    # CTRL_L_mouth_stretch
+    cmds.connectAttr ( newCon('CTRL_L_mouth_stretch')+'.ty', 'CTRL_expressions_mouthStretchL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthStretchL.output', 'BS_ARKit.MouthStretchLeft', f=True )
+
+    # CTRL_R_mouth_stretch
+    cmds.connectAttr ( newCon('CTRL_R_mouth_stretch')+'.ty', 'CTRL_expressions_mouthStretchR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthStretchR.output', 'BS_ARKit.MouthStretchRight', f=True )
+
+    # CTRL_L_mouth_lowerLipDepress
+    cmds.connectAttr ( newCon('CTRL_L_mouth_lowerLipDepress')+'.ty', 'CTRL_expressions_mouthLowerLipDepressL.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthLowerLipDepressL.output', 'BS_ARKit.MouthLowerDownLeft', f=True )
+
+    # CTRL_R_mouth_lowerLipDepress
+    cmds.connectAttr ( newCon('CTRL_R_mouth_lowerLipDepress')+'.ty', 'CTRL_expressions_mouthLowerLipDepressR.input', f=True )
+    cmds.connectAttr ( 'CTRL_expressions_mouthLowerLipDepressR.output', 'BS_ARKit.MouthLowerDownRight', f=True )
+
+    # CTRL_C_mouth_funnelD
+    cmds.connectAttr ( 'CTRL_C_mouth_funnelD.ty', 'BS_ARKit.MouthFunnel', f=True )
+
+    # CTRL_C_mouth_purseD
+    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', 'BS_ARKit.MouthPucker', f=True )
+
+    # FRM_oh
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_purseU', 'CTRL_expressions_mouthLipsPurseUL.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_purseU', 'CTRL_expressions_mouthLipsPurseUR.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_purseD', 'CTRL_expressions_mouthLipsPurseDL.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_purseD', 'CTRL_expressions_mouthLipsPurseDR.input', f=True )
+
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_towardsU', 'CTRL_expressions_mouthLipsPurseUL.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_towardsU', 'CTRL_expressions_mouthLipsPurseUR.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_towardsD', 'CTRL_expressions_mouthLipsPurseDL.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_towardsD', 'CTRL_expressions_mouthLipsPurseDR.input', f=True )
+
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_funnelU', 'CTRL_expressions_mouthFunnelUL.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_funnelU', 'CTRL_expressions_mouthFunnelUR.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_funnelD', 'CTRL_expressions_mouthFunnelDL.input', f=True )
+    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_funnelD', 'CTRL_expressions_mouthFunnelDR.input', f=True )
+
+    # MouthPucker -mouthPurse
+    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_L_mouth_purseU', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_R_mouth_purseU', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_L_mouth_purseD', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_R_mouth_purseD', f=True )
 
     # MouthPucker - mouthFunnel
     myMult = cmds.createNode('multiplyDivide', n='mouthFunnel_mult')
@@ -335,92 +424,41 @@ def mouthConnect():
     cmds.setAttr(myClamp+'.maxR', 1)
     cmds.connectAttr ( myPlus+'.output1D', myClamp+'.inputR', f=True )
 
-    for i in myList:
-        cmds.connectAttr (myClamp+'.outputR', newCon('CTRL_expressions')+'.mouthFunnel'+i, f=True)
-        cmds.connectAttr ( myClamp+'.outputR', 'CTRL_expressions_mouthFunnel'+i+'.input', f=True )
-
-    # MouthPucker -mouthPurse
-    for i in myList:
-        connectExp('CTRL_C_mouth_purseD', 'ty', 'CTRL_expressions_mouthLipsPurse'+i)
+    cmds.connectAttr ( myClamp+'.outputR', newCon('FRM_oh')+'.CTRL_L_mouth_funnelU', f=True )
+    cmds.connectAttr ( myClamp+'.outputR', newCon('FRM_oh')+'.CTRL_R_mouth_funnelU', f=True )
+    cmds.connectAttr ( myClamp+'.outputR', newCon('FRM_oh')+'.CTRL_L_mouth_funnelD', f=True )
+    cmds.connectAttr ( myClamp+'.outputR', newCon('FRM_oh')+'.CTRL_R_mouth_funnelD', f=True )
 
     # MouthPucker - mouthTowards
     myMult = cmds.createNode('multiplyDivide', n='mouthTowards_mult')
     cmds.setAttr(myMult+'.input2X', 0.41)
     cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', myMult+'.input1X', f=True )
 
-    for i in myList:
-        cmds.connectAttr ( myMult+'.outputX', 'CTRL_expressions.mouthLipsTowards'+i, f=True )
-        cmds.connectAttr ( myMult+'.outputX', newCon('CTRL_expressions')+'.mouthLipsTowards'+i, f=True )
+    cmds.connectAttr ( myMult+'.outputX', newCon('FRM_oh')+'.CTRL_L_mouth_towardsU', f=True )
+    cmds.connectAttr ( myMult+'.outputX', newCon('FRM_oh')+'.CTRL_R_mouth_towardsU', f=True )
+    cmds.connectAttr ( myMult+'.outputX', newCon('FRM_oh')+'.CTRL_L_mouth_towardsD', f=True )
+    cmds.connectAttr ( myMult+'.outputX', newCon('FRM_oh')+'.CTRL_R_mouth_towardsD', f=True )
 
-    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', 'BS_ARKit.MouthPucker', f=True )
+    # CTRL_C_mouth_lipsRollD
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollInL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollOutL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollInR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollOutR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'BS_ARKit.MouthRollLower', f=True )
 
-    # Mouth etc
-    connectExpToTarget('CTRL_C_mouth', 'ty', 'CTRL_expressions_mouthLeft', 'MouthLeft')
-    connectExpToTarget('CTRL_C_mouth', 'ty', 'CTRL_expressions_mouthRight', 'MouthRight')
-    connectExpToTarget('CTRL_L_mouth_cornerPull', 'ty', 'CTRL_expressions_mouthCornerPullL', 'MouthSmileLeft')
-    connectExpToTarget('CTRL_R_mouth_cornerPull', 'ty', 'CTRL_expressions_mouthCornerPullR', 'MouthSmileRight')
-    connectExpToTarget('CTRL_L_mouth_cornerDepress', 'ty', 'CTRL_expressions_mouthCornerDepressL', 'MouthFrownLeft')
-    connectExpToTarget('CTRL_R_mouth_cornerDepress', 'ty', 'CTRL_expressions_mouthCornerDepressR', 'MouthFrownRight')
-    connectExpToTarget('CTRL_L_mouth_dimple', 'ty', 'CTRL_expressions_mouthDimpleL', 'MouthDimpleLeft')
-    connectExpToTarget('CTRL_R_mouth_dimple', 'ty', 'CTRL_expressions_mouthDimpleR', 'MouthDimpleRight')
-    connectExpToTarget('CTRL_L_mouth_stretch', 'ty', 'CTRL_expressions_mouthStretchL', 'MouthStretchLeft')
-    connectExpToTarget('CTRL_R_mouth_stretch', 'ty', 'CTRL_expressions_mouthStretchR', 'MouthStretchRight')
+    # CTRL_C_mouth_lipsRollU
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollInL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollOutL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollInR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollOutR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'BS_ARKit.MouthRollUpper', f=True )
 
-    # MouthRollUpper
-    myMult = cmds.createNode('multiplyDivide', n='MouthRollLower_mult')
-    cmds.setAttr(myMult+'.input2X', 0.5)
-    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', myMult+'.input1X', f=True )
+    # CTRL_C_jaw_ChinRaiseD
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'CTRL_expressions_mouthUpperLipRollInR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'CTRL_expressions_mouthUpperLipRollOutR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'BS_ARKit.MouthShrugLower', f=True )
 
-    myCond = cmds.createNode('condition', n='MouthRollLower_cond')
-    cmds.setAttr(myCond+'.operation', 1)
-    cmds.connectAttr ( myMult+'.outputX', myCond+'.firstTerm', f=True )
-    cmds.connectAttr ( myMult+'.outputX', myCond+'.colorIfTrueR', f=True )
-    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', myCond+'.colorIfFalseR', f=True )
-
-    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollInR.input', f=True )
-    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollOutR.input', f=True )
-    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollInL.input', f=True )
-    cmds.connectAttr ( myCond+'.outColorR', 'CTRL_expressions_mouthUpperLipRollOutL.input', f=True )
-
-    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', 'BS_ARKit.MouthRollUpper', f=True )
-
-    # MouthRollLower
-    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollOutR')
-    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollInR')
-    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollOutL')
-    connectExp('CTRL_C_mouth_lipsRollD', 'ty', 'CTRL_expressions_mouthLowerLipRollInL')
-
-    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', 'BS_ARKit.MouthRollLower', f=True )
-
-    # MouthShrugLower
-    connectExp('CTRL_C_jaw_ChinRaiseD', 'ty', 'CTRL_expressions_jawChinRaiseDL')
-    connectExp('CTRL_C_jaw_ChinRaiseD', 'ty', 'CTRL_expressions_jawChinRaiseDR')
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD'+'.ty', 'BS_ARKit.MouthShrugLower', f=True )
-
-    # MouthShrugUpper
-    connectExp('CTRL_C_jaw_ChinRaiseU', 'ty', 'CTRL_expressions_jawChinRaiseUL')
-    connectExp('CTRL_C_jaw_ChinRaiseU', 'ty', 'CTRL_expressions_jawChinRaiseUR')
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU'+'.ty', 'BS_ARKit.MouthShrugUpper', f=True )
-
-    # MouthPressLeft
-    connectExp('CTRL_L_mouth_press', 'ty', 'CTRL_expressions_mouthPressUL')
-    connectExp('CTRL_L_mouth_press', 'ty', 'CTRL_expressions_mouthPressDL')
-    cmds.connectAttr ( 'CTRL_L_mouth_press'+'.ty', 'BS_ARKit.MouthPressLeft', f=True )
-
-    # MouthPressRight
-    connectExp('CTRL_R_mouth_press', 'ty', 'CTRL_expressions_mouthPressUR')
-    connectExp('CTRL_R_mouth_press', 'ty', 'CTRL_expressions_mouthPressDR')
-    cmds.connectAttr ( 'CTRL_R_mouth_press'+'.ty', 'BS_ARKit.MouthPressRight', f=True )
-
-    # MouthLowerDownLeft, MouthLowerDownRight
-    connectExpToTarget('CTRL_L_mouth_lowerLipDepress', 'ty', 'CTRL_expressions_mouthLowerLipDepressL', 'MouthLowerDownLeft')
-    connectExpToTarget('CTRL_R_mouth_lowerLipDepress', 'ty', 'CTRL_expressions_mouthLowerLipDepressR', 'MouthLowerDownRight')
-
-    # MouthUpperUpLeft, MouthUpperUpRight
-    connectExpToTarget('CTRL_L_mouth_upperLipRaise', 'ty', 'CTRL_expressions_mouthUpperLipRaiseL', 'MouthUpperUpLeft')
-    connectExpToTarget('CTRL_R_mouth_upperLipRaise', 'ty', 'CTRL_expressions_mouthUpperLipRaiseR', 'MouthUpperUpRight')
-
-    # MouthClose
+    # CTRL_C_mouth_close
     myMult = cmds.createNode('multiplyDivide', n='MouthClose_mult')
     cmds.connectAttr ( newCon('CTRL_C_jaw')+'.ty', myMult+'.input1X', f=True )
     cmds.connectAttr ( 'CTRL_C_mouth_close.ty', myMult+'.input2X', f=True )
@@ -430,16 +468,23 @@ def mouthConnect():
     cmds.setAttr(myCond+'.colorIfFalseR', 0)
     cmds.connectAttr ( newCon('CTRL_C_jaw')+'.ty', myCond+'.firstTerm', f=True )
     cmds.connectAttr ( myMult+'.outputX', myCond+'.colorIfTrueR', f=True )
+
     cmds.connectAttr ( myCond+'.outColorR', 'BS_ARKit.MouthClose', f=True )
 
-    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUL.input', f=True )
-    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUR.input', f=True )
-    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDL.input', f=True )
-    # cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDR.input', f=True )
-    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherUL')
-    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherUR')
-    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherDL')
-    connectExp('CTRL_C_mouth_close', 'ty', 'CTRL_expressions_mouthLipsTogetherDR')
+    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUR.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDL.input', f=True )
+    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDR.input', f=True )
+
+    # CTRL_L_mouth_press
+    cmds.connectAttr ( 'CTRL_L_mouth_press.ty', 'CTRL_expressions_mouthPressDL.input', f=True )
+    cmds.connectAttr ( 'CTRL_L_mouth_press.ty', 'CTRL_expressions_mouthPressUL.input', f=True )
+    cmds.connectAttr ( 'CTRL_L_mouth_press.ty', 'BS_ARKit.MouthPressLeft', f=True )
+
+    # CTRL_R_mouth_press
+    cmds.connectAttr ( 'CTRL_R_mouth_press.ty', 'CTRL_expressions_mouthPressDR.input', f=True )
+    cmds.connectAttr ( 'CTRL_R_mouth_press.ty', 'CTRL_expressions_mouthPressUR.input', f=True )
+    cmds.connectAttr ( 'CTRL_R_mouth_press.ty', 'BS_ARKit.MouthPressRight', f=True )
 
 def browConnect():
     # BrowDownLeft, BrowDownRight
