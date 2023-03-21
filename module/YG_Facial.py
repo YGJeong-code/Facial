@@ -47,7 +47,7 @@ class YG_Facial(object):
 
         cmds.button(label='make ARKit target', w=self.size*2, c=self.makeARKitTargetBtn)
 
-        cmds.checkBox('shaderCheck', label='Shader Connect', v=True )
+        # cmds.checkBox('shaderCheck', label='Shader Connect', v=True )
         cmds.button(label='connect UI', w=self.size*2, c=self.connectUIBtn)
 
         cmds.button(label='delete MetaHuman', w=self.size*2, c=self.deleteMetaHumanBtn)
@@ -172,10 +172,11 @@ class YG_Facial(object):
                 cmds.setAttr('Lights.rx', 0)
 
     def deleteMetaHumanBtn(self, *args):
-        cmds.delete('DHIhead:spine_04','DHIbody:root','root_drv','rig','Body_joints','FacialControls','PSD')
+        # cmds.delete('DHIhead:spine_04','DHIbody:root','root_drv','rig','Body_joints','FacialControls','PSD')
 
         try:
             cmds.delete('polySurface1')
+            cmds.delete('head_grp')
         except:
             pass
 
