@@ -27,7 +27,12 @@ def makeCorrectiveShape(target, pose):
 
 # makeCorrectiveShape('MouthClose', 'JawOpen')
 
+def progressBarBtn(myProgress):
+    cmds.progressBar('progress_bar', edit=True, step=myProgress)
+
 def duplicateLODGroup():
+    progressBarBtn(0)
+
     if cmds.checkBox('combineHeadGrp', q=True, v=True ):
         # combine mesh
         myList = cmds.listRelatives('head_lod0_grp', c=True)
@@ -41,36 +46,52 @@ def duplicateLODGroup():
     ARKitDict.myTargetGrp = cmds.group(em=True, n='target_grp')
     cmds.hide(ARKitDict.myTargetGrp)
 
+    progressBarBtn(10) #10
+
     # make pose & duplicate
-    for target in ARKitDict.myList:
-        print (target)
+    for target in range(len(ARKitDict.myList)):
+        print (ARKitDict.myList[target])
+        progressBarBtn(1) # +51 = 61
 
-        makePose(target)
-        cmds.duplicate(ARKitDict.myMesh, n=target, rc=True)
+        makePose(ARKitDict.myList[target])
+        cmds.duplicate(ARKitDict.myMesh, n=ARKitDict.myList[target], rc=True)
 
-        if target != 'Default':
-            cmds.parent(target, ARKitDict.myTargetGrp)
+        if ARKitDict.myList[target] != 'Default':
+            cmds.parent(ARKitDict.myList[target], ARKitDict.myTargetGrp)
         else:
-            if bool(cmds.listRelatives(target, p=True)):
-                cmds.parent(target, world=True)
+            if bool(cmds.listRelatives(ARKitDict.myList[target], p=True)):
+                cmds.parent(ARKitDict.myList[target], world=True)
 
     # mouth close
     makeCorrectiveShape('MouthClose', 'JawOpen')
+    progressBarBtn(1) #62
 
     # eye
     makeCorrectiveShape('EyeBlinkLookDownLeft', 'EyeLookDownLeft')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkLookInLeft', 'EyeLookInLeft')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkLookOutLeft', 'EyeLookOutLeft')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkLookUpLeft', 'EyeLookUpLeft')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkSquintLeft', 'EyeSquintLeft')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkCheekSquintLeft', 'CheekSquintLeft')
+    progressBarBtn(1)
 
     makeCorrectiveShape('EyeBlinkLookDownRight', 'EyeLookDownRight')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkLookInRight', 'EyeLookInRight')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkLookOutRight', 'EyeLookOutRight')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkLookUpRight', 'EyeLookUpRight')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkSquintRight', 'EyeSquintRight')
+    progressBarBtn(1)
     makeCorrectiveShape('EyeBlinkCheekSquintRight', 'CheekSquintRight')
+    progressBarBtn(1) #74
 
     # blendShape
     myTargetList = cmds.listRelatives(ARKitDict.myTargetGrp, c=True)
@@ -81,6 +102,7 @@ def duplicateLODGroup():
         cmds.delete(ARKitDict.myTargetGrp)
 
     makePose('Default')
+    progressBarBtn(10) #84
 
     # unlock
     myList = ['tx','ty','tz','rx','ry','rz','sx','sy','sz']
@@ -90,40 +112,79 @@ def duplicateLODGroup():
     cmds.setAttr ("Default.tx", -27)
 
     # connect blendShape 2 ui
-    importUI()
+    if cmds.checkBox('importUI', q=True, v=True ):
+        importUI()
     # connectBlendShape2UI()
+    progressBarBtn(16) #100
 
 # pose
+def find_top_level_parent(node):
+    while True:
+        parent = cmds.listRelatives(node, parent=True, f=True)
+        if parent:
+            node = parent[0]
+        else:
+            break
+    return node
+
 def newCon(con):
     for i in cmds.ls(con):
-        if 'head_grp' not in cmds.listRelatives(i, f=True)[0]:
+        if '|headRig_grp' == find_top_level_parent(i):
             return i
 
 def oldCon(con):
     for i in cmds.ls(con):
-        if 'head_grp' in cmds.listRelatives(i, f=True)[0]:
+        if '|headRig_grp' != find_top_level_parent(i) or '|rig' == find_top_level_parent(i):
             return i
 
 def defaultPoseNew():
     for item in ARKitDict.myNewDict:
         for con in ARKitDict.myNewDict[item]:
             for axis in ARKitDict.myNewDict[item][con]:
-                cmds.setAttr(newCon(con)+'.'+axis, 0)
+                print('new : ', con)
+                # cmds.setAttr(newCon(con)+'.'+axis, 0)
+                cmds.setAttr(con+'.'+axis, 0)
                 cmds.setAttr(newCon('CTRL_C_eye')+'.tx', 0)
                 cmds.setAttr(newCon('CTRL_C_eye')+'.ty', 0)
-
+'''
 def defaultPose():
     for item in ARKitDict.myDict:
         for con in ARKitDict.myDict[item]:
             for axis in ARKitDict.myDict[item][con]:
                 if bool(oldCon(con)):
+                    print('oldCon : ', con)
+
                     cmds.setAttr(oldCon(con)+'.'+axis, 0)
                     cmds.setAttr(oldCon('CTRL_C_eye')+'.tx', 0)
                     cmds.setAttr(oldCon('CTRL_C_eye')+'.ty', 0)
-                    # print ('Default')
+
                 elif bool(newCon(con)):
                     defaultPoseNew()
                     print ('defaultPoseNew')
+
+    try:
+        defaultPoseNew()
+    except:
+        pass
+'''
+def defaultPose():
+    try:
+        for item in ARKitDict.myDict:
+            for con in ARKitDict.myDict[item]:
+                for axis in ARKitDict.myDict[item][con]:
+                    cmds.setAttr(con+'.'+axis, 0)
+        cmds.setAttr('CTRL_C_eye'+'.tx', 0)
+        cmds.setAttr('CTRL_C_eye'+'.ty', 0)
+    except:
+        pass
+
+    try:
+        for item in ARKitDict.myNewDict:
+            for con in ARKitDict.myNewDict[item]:
+                for axis in ARKitDict.myNewDict[item][con]:
+                    cmds.setAttr(con+'.'+axis, 0)
+    except:
+        pass
 
 def makePoseNew(target):
     if target == 'Default':
@@ -134,8 +195,9 @@ def makePoseNew(target):
         for con in ARKitDict.myNewDict[target]:
             for axis in ARKitDict.myNewDict[target][con]:
                 value = ARKitDict.myNewDict[target][con][axis]
-                cmds.setAttr(newCon(con)+'.'+axis, value)
-
+                # cmds.setAttr(newCon(con)+'.'+axis, value)
+                cmds.setAttr(con+'.'+axis, value)
+'''
 def makePose(target):
     if target == 'Default':
         defaultPose()
@@ -147,10 +209,37 @@ def makePose(target):
                 value = ARKitDict.myDict[target][con][axis]
                 if bool(oldCon(con)):
                     cmds.setAttr(oldCon(con)+'.'+axis, value)
+                    try:
+                        makePoseNew(target)
+                    except:
+                        pass
+
                 elif bool(newCon(con)):
                     makePoseNew(target)
                 else:
                     makePoseNew(target)
+'''
+def makePose(target):
+    if target == 'Default':
+        defaultPose()
+    else:
+        defaultPose()
+
+        try:
+            for con in ARKitDict.myDict[target]:
+                for axis in ARKitDict.myDict[target][con]:
+                    value = ARKitDict.myDict[target][con][axis]
+                    cmds.setAttr(con+'.'+axis, value)
+        except:
+            pass
+
+        try:
+            for con in ARKitDict.myNewDict[target]:
+                for axis in ARKitDict.myNewDict[target][con]:
+                    value = ARKitDict.myNewDict[target][con][axis]
+                    cmds.setAttr(con+'.'+axis, value)
+        except:
+            pass
 
 def importUI():
     usd = cmds.internalVar(usd=True)
@@ -186,6 +275,7 @@ def eyeBlinkConnect(target, exp, blink):
     cmds.connectAttr (myCond+'.outColorR', myMult+'.input1X', f=True)
     cmds.connectAttr (oldCon('CTRL_expressions')+'.'+blink, myMult+'.input2X', f=True)
     cmds.connectAttr (myMult+'.outputX', 'BS_ARKit.'+target, f=True)
+    print('eyeBlinkConnect : ', target)
 
 def eyeConnect():
     # CTRL_C_eye
@@ -305,16 +395,27 @@ def jawConnect():
     cmds.connectAttr ( newCon('CTRL_C_jaw_fwdBack')+'.ty', myMult+'.input1X', f=True )
     cmds.connectAttr ( myMult+'.outputX', 'BS_ARKit.JawForward', f=True )
 
+def connect_set_driven_key(driver, driven, driver_attr, driven_attr, driver_value, driven_value):
+    # Set driver and driven attributes
+    print('driver : ', driver + '.' + driver_attr, driver_value)
+    cmds.setAttr(driver + '.' + driver_attr, driver_value)
+
+    print('driven : ', driven + '.' + driven_attr, driven_value)
+    cmds.setAttr(driven + '.' + driven_attr, driven_value)
+
+    # Create set-driven keyframe
+    cmds.setDrivenKeyframe(driven + '.' + driven_attr, currentDriver=driver + '.' + driver_attr)
+
 def mouthConnect():
     # CTRL_C_jaw_ChinRaiseD
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'CTRL_expressions_jawChinRaiseDL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'CTRL_expressions_jawChinRaiseDR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseD.ty', 'BS_ARKit.MouthShrugLower', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_jaw_ChinRaiseD')+'.ty', 'CTRL_expressions_jawChinRaiseDL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_jaw_ChinRaiseD')+'.ty', 'CTRL_expressions_jawChinRaiseDR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_jaw_ChinRaiseD')+'.ty', 'BS_ARKit.MouthShrugLower', f=True )
 
     # CTRL_C_jaw_ChinRaiseU
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU.ty', 'CTRL_expressions_jawChinRaiseUL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU.ty', 'CTRL_expressions_jawChinRaiseUR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_jaw_ChinRaiseU.ty', 'BS_ARKit.MouthShrugUpper', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_jaw_ChinRaiseU')+'.ty', 'CTRL_expressions_jawChinRaiseUL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_jaw_ChinRaiseU')+'.ty', 'CTRL_expressions_jawChinRaiseUR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_jaw_ChinRaiseU')+'.ty', 'BS_ARKit.MouthShrugUpper', f=True )
 
     # CTRL_C_mouth
     cmds.connectAttr ( newCon('CTRL_C_mouth')+'.ty', 'CTRL_expressions_mouthLeft.input', f=True )
@@ -372,10 +473,10 @@ def mouthConnect():
     cmds.connectAttr ( 'CTRL_expressions_mouthLowerLipDepressR.output', 'BS_ARKit.MouthLowerDownRight', f=True )
 
     # CTRL_C_mouth_funnelD
-    cmds.connectAttr ( 'CTRL_C_mouth_funnelD.ty', 'BS_ARKit.MouthFunnel', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_funnelD')+'.ty', 'BS_ARKit.MouthFunnel', f=True )
 
     # CTRL_C_mouth_purseD
-    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', 'BS_ARKit.MouthPucker', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', 'BS_ARKit.MouthPucker', f=True )
 
     # FRM_oh
     cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_purseU', 'CTRL_expressions_mouthLipsPurseUL.input', f=True )
@@ -383,10 +484,32 @@ def mouthConnect():
     cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_purseD', 'CTRL_expressions_mouthLipsPurseDL.input', f=True )
     cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_purseD', 'CTRL_expressions_mouthLipsPurseDR.input', f=True )
 
-    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_towardsU', 'CTRL_expressions_mouthLipsPurseUL.input', f=True )
-    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_towardsU', 'CTRL_expressions_mouthLipsPurseUR.input', f=True )
-    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_towardsD', 'CTRL_expressions_mouthLipsPurseDL.input', f=True )
-    cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_towardsD', 'CTRL_expressions_mouthLipsPurseDR.input', f=True )
+    if bool(cmds.ls('CTRL_expressions_mouthLipsTowardsUL')):
+        print('CTRL_expressions_mouthLipsTowardsUL : exists')
+        cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_towardsU', 'CTRL_expressions_mouthLipsTowardsUL.input', f=True )
+        cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_towardsU', 'CTRL_expressions_mouthLipsTowardsUR.input', f=True )
+        cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_towardsD', 'CTRL_expressions_mouthLipsTowardsDL.input', f=True )
+        cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_towardsD', 'CTRL_expressions_mouthLipsTowardsDR.input', f=True )
+    else:
+        print('CTRL_expressions_mouthLipsTowardsUL : no exists')
+        driver_object = newCon('FRM_oh')
+        driven_object = oldCon('CTRL_expressions')
+
+        print('connect set driven : FRM_oh.CTRL_L_mouth_towardsU')
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_L_mouth_towardsU', 'mouthLipsTowardsUL', 0.0, 0.0)
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_L_mouth_towardsU', 'mouthLipsTowardsUL', 1.0, 1.0)
+
+        print('connect set driven : FRM_oh.CTRL_R_mouth_towardsU')
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_R_mouth_towardsU', 'mouthLipsTowardsUR', 0.0, 0.0)
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_R_mouth_towardsU', 'mouthLipsTowardsUR', 1.0, 1.0)
+
+        print('connect set driven : FRM_oh.CTRL_L_mouth_towardsD')
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_L_mouth_towardsD', 'mouthLipsTowardsDL', 0.0, 0.0)
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_L_mouth_towardsD', 'mouthLipsTowardsDL', 1.0, 1.0)
+
+        print('connect set driven : FRM_oh.CTRL_R_mouth_towardsD')
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_R_mouth_towardsD', 'mouthLipsTowardsDR', 0.0, 0.0)
+        connect_set_driven_key(driver_object, driven_object, 'CTRL_R_mouth_towardsD', 'mouthLipsTowardsDR', 1.0, 1.0)
 
     cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_L_mouth_funnelU', 'CTRL_expressions_mouthFunnelUL.input', f=True )
     cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_funnelU', 'CTRL_expressions_mouthFunnelUR.input', f=True )
@@ -394,10 +517,10 @@ def mouthConnect():
     cmds.connectAttr ( newCon('FRM_oh')+'.CTRL_R_mouth_funnelD', 'CTRL_expressions_mouthFunnelDR.input', f=True )
 
     # MouthPucker -mouthPurse
-    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_L_mouth_purseU', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_R_mouth_purseU', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_L_mouth_purseD', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_purseD.ty', newCon('FRM_oh')+'.CTRL_R_mouth_purseD', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', newCon('FRM_oh')+'.CTRL_L_mouth_purseU', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', newCon('FRM_oh')+'.CTRL_R_mouth_purseU', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', newCon('FRM_oh')+'.CTRL_L_mouth_purseD', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_purseD')+'.ty', newCon('FRM_oh')+'.CTRL_R_mouth_purseD', f=True )
 
     # MouthPucker - mouthFunnel
     myMult = cmds.createNode('multiplyDivide', n='mouthFunnel_mult')
@@ -428,23 +551,23 @@ def mouthConnect():
     cmds.connectAttr ( myMult+'.outputX', newCon('FRM_oh')+'.CTRL_R_mouth_towardsD', f=True )
 
     # CTRL_C_mouth_lipsRollD
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollInL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollOutL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollInR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'CTRL_expressions_mouthLowerLipRollOutR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollD.ty', 'BS_ARKit.MouthRollLower', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', 'CTRL_expressions_mouthLowerLipRollInL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', 'CTRL_expressions_mouthLowerLipRollOutL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', 'CTRL_expressions_mouthLowerLipRollInR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', 'CTRL_expressions_mouthLowerLipRollOutR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollD')+'.ty', 'BS_ARKit.MouthRollLower', f=True )
 
     # CTRL_C_mouth_lipsRollU
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollInL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollOutL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollInR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'CTRL_expressions_mouthUpperLipRollOutR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_lipsRollU.ty', 'BS_ARKit.MouthRollUpper', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', 'CTRL_expressions_mouthUpperLipRollInL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', 'CTRL_expressions_mouthUpperLipRollOutL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', 'CTRL_expressions_mouthUpperLipRollInR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', 'CTRL_expressions_mouthUpperLipRollOutR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_lipsRollU')+'.ty', 'BS_ARKit.MouthRollUpper', f=True )
 
     # CTRL_C_mouth_close
     myMult = cmds.createNode('multiplyDivide', n='MouthClose_mult')
     cmds.connectAttr ( newCon('CTRL_C_jaw')+'.ty', myMult+'.input1X', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', myMult+'.input2X', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_close')+'.ty', myMult+'.input2X', f=True )
 
     myCond = cmds.createNode('condition', n='MouthClose_cond')
     cmds.setAttr(myCond+'.operation', 1)
@@ -454,20 +577,95 @@ def mouthConnect():
 
     cmds.connectAttr ( myCond+'.outColorR', 'BS_ARKit.MouthClose', f=True )
 
-    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherUR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_close.ty', 'CTRL_expressions_mouthLipsTogetherDR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_close')+'.ty', 'CTRL_expressions_mouthLipsTogetherUL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_close')+'.ty', 'CTRL_expressions_mouthLipsTogetherUR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_close')+'.ty', 'CTRL_expressions_mouthLipsTogetherDL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_close')+'.ty', 'CTRL_expressions_mouthLipsTogetherDR.input', f=True )
 
     # CTRL_L_mouth_press
-    cmds.connectAttr ( 'CTRL_L_mouth_press.ty', 'CTRL_expressions_mouthPressDL.input', f=True )
-    cmds.connectAttr ( 'CTRL_L_mouth_press.ty', 'CTRL_expressions_mouthPressUL.input', f=True )
-    cmds.connectAttr ( 'CTRL_L_mouth_press.ty', 'BS_ARKit.MouthPressLeft', f=True )
+    cmds.connectAttr ( newCon('CTRL_L_mouth_press')+'.ty', 'CTRL_expressions_mouthPressDL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_L_mouth_press')+'.ty', 'CTRL_expressions_mouthPressUL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_L_mouth_press')+'.ty', 'BS_ARKit.MouthPressLeft', f=True )
 
     # CTRL_R_mouth_press
-    cmds.connectAttr ( 'CTRL_R_mouth_press.ty', 'CTRL_expressions_mouthPressDR.input', f=True )
-    cmds.connectAttr ( 'CTRL_R_mouth_press.ty', 'CTRL_expressions_mouthPressUR.input', f=True )
-    cmds.connectAttr ( 'CTRL_R_mouth_press.ty', 'BS_ARKit.MouthPressRight', f=True )
+    cmds.connectAttr ( newCon('CTRL_R_mouth_press')+'.ty', 'CTRL_expressions_mouthPressDR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_R_mouth_press')+'.ty', 'CTRL_expressions_mouthPressUR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_R_mouth_press')+'.ty', 'BS_ARKit.MouthPressRight', f=True )
+
+def teethConnect():
+    driven_object = oldCon('CTRL_expressions')
+
+    if bool(cmds.ls('CTRL_expressions_teethFwdU')):
+        cmds.connectAttr ( newCon('CTRL_C_teeth_fwdBackU')+'.ty', 'CTRL_expressions_teethFwdU.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackU'), driven_object, 'ty', 'teethFwdU', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackU'), driven_object, 'ty', 'teethFwdU', -1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethBackU')):
+        cmds.connectAttr ( newCon('CTRL_C_teeth_fwdBackU')+'.ty', 'CTRL_expressions_teethBackU.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackU'), driven_object, 'ty', 'teethBackU', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackU'), driven_object, 'ty', 'teethBackU', 1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethFwdD')):
+        cmds.connectAttr ( newCon('CTRL_C_teeth_fwdBackD')+'.ty', 'CTRL_expressions_teethFwdD.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackD'), driven_object, 'ty', 'teethFwdD', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackD'), driven_object, 'ty', 'teethFwdD', -1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethBackD')):
+        cmds.connectAttr ( newCon('CTRL_C_teeth_fwdBackD')+'.ty', 'CTRL_expressions_teethBackD.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackD'), driven_object, 'ty', 'teethBackD', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teeth_fwdBackD'), driven_object, 'ty', 'teethBackD', 1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethLeftU')):
+        cmds.connectAttr ( newCon('CTRL_C_teethU')+'.tx', 'CTRL_expressions_teethLeftU.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'tx', 'teethLeftU', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'tx', 'teethLeftU', 1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethRightU')):
+        cmds.connectAttr ( newCon('CTRL_C_teethU')+'.tx', 'CTRL_expressions_teethRightU.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'tx', 'teethRightU', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'tx', 'teethRightU', -1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethUpU')):
+        cmds.connectAttr ( newCon('CTRL_C_teethU')+'.ty', 'CTRL_expressions_teethUpU.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'ty', 'teethUpU', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'ty', 'teethUpU', 1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethDownU')):
+        cmds.connectAttr ( newCon('CTRL_C_teethU')+'.ty', 'CTRL_expressions_teethDownU.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'ty', 'teethDownU', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethU'), driven_object, 'ty', 'teethDownU', -1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethLeftD')):
+        cmds.connectAttr ( newCon('CTRL_C_teethD')+'.tx', 'CTRL_expressions_teethLeftD.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'tx', 'teethLeftD', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'tx', 'teethLeftD', 1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethRightD')):
+        cmds.connectAttr ( newCon('CTRL_C_teethD')+'.tx', 'CTRL_expressions_teethRightD.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'tx', 'teethRightD', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'tx', 'teethRightD', -1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethUpD')):
+        cmds.connectAttr ( newCon('CTRL_C_teethD')+'.ty', 'CTRL_expressions_teethUpD.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'ty', 'teethUpD', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'ty', 'teethUpD', 1.0, 1.0)
+
+    if bool(cmds.ls('CTRL_expressions_teethDownD')):
+        cmds.connectAttr ( newCon('CTRL_C_teethD')+'.ty', 'CTRL_expressions_teethDownD.input', f=True )
+    else:
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'ty', 'teethDownD', 0.0, 0.0)
+        connect_set_driven_key(newCon('CTRL_C_teethD'), driven_object, 'ty', 'teethDownD', -1.0, 1.0)
 
 def browConnect():
     # CTRL_L_brow_down
@@ -480,7 +678,7 @@ def browConnect():
 
     # browRaiseInL
     myPlus = cmds.createNode('plusMinusAverage', n='browRaiseInL_plus')
-    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', myPlus+'.input1D[0]', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_brow_raiseIn')+'.ty', myPlus+'.input1D[0]', f=True )
     cmds.connectAttr ( newCon('CTRL_L_brow_raiseOut')+'.ty', myPlus+'.input1D[1]', f=True )
 
     myClamp = cmds.createNode('clamp', n='browRaiseInL_clamp')
@@ -491,7 +689,7 @@ def browConnect():
 
     # browRaiseInR
     myPlus = cmds.createNode('plusMinusAverage', n='browRaiseInR_plus')
-    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', myPlus+'.input1D[0]', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_brow_raiseIn')+'.ty', myPlus+'.input1D[0]', f=True )
     cmds.connectAttr ( newCon('CTRL_R_brow_raiseOut')+'.ty', myPlus+'.input1D[1]', f=True )
 
     myClamp = cmds.createNode('clamp', n='browRaiseInR_clamp')
@@ -501,9 +699,9 @@ def browConnect():
     cmds.connectAttr ( myClamp+'.outputR', 'CTRL_expressions_browRaiseInR.input', f=True )
 
     # CTRL_C_brow_raiseIn
-    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', 'CTRL_expressions_browLateralL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', 'CTRL_expressions_browLateralR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_brow_raiseIn.ty', 'BS_ARKit.BrowInnerUp', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_brow_raiseIn')+'.ty', 'CTRL_expressions_browLateralL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_brow_raiseIn')+'.ty', 'CTRL_expressions_browLateralR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_brow_raiseIn')+'.ty', 'BS_ARKit.BrowInnerUp', f=True )
 
     # CTRL_L_brow_raiseOut
     cmds.connectAttr ( newCon('CTRL_L_brow_raiseOut')+'.ty', 'CTRL_expressions_browRaiseOuterL.input', f=True )
@@ -515,13 +713,13 @@ def browConnect():
 
 def cheekConnect():
     # CTRL_C_mouth_suckBlow
-    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'CTRL_expressions_mouthCheekSuckL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'CTRL_expressions_mouthCheekSuckR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'CTRL_expressions_mouthCheekBlowL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'CTRL_expressions_mouthCheekBlowR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'CTRL_expressions_mouthLipsBlowL.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'CTRL_expressions_mouthLipsBlowR.input', f=True )
-    cmds.connectAttr ( 'CTRL_C_mouth_suckBlow.ty', 'BS_ARKit.CheekPuff', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_suckBlow')+'.ty', 'CTRL_expressions_mouthCheekSuckL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_suckBlow')+'.ty', 'CTRL_expressions_mouthCheekSuckR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_suckBlow')+'.ty', 'CTRL_expressions_mouthCheekBlowL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_suckBlow')+'.ty', 'CTRL_expressions_mouthCheekBlowR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_suckBlow')+'.ty', 'CTRL_expressions_mouthLipsBlowL.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_suckBlow')+'.ty', 'CTRL_expressions_mouthLipsBlowR.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth_suckBlow')+'.ty', 'BS_ARKit.CheekPuff', f=True )
 
 def noseConnect():
     # CTRL_L_nose
@@ -559,7 +757,7 @@ def tongueConnect():
     cmds.connectAttr ( newCon('CTRL_C_tongue')+'.ty', 'CTRL_expressions_tongueDown.input', f=True )
     cmds.connectAttr ( newCon('CTRL_C_tongue')+'.tx', 'CTRL_expressions_tongueLeft.input', f=True )
     cmds.connectAttr ( newCon('CTRL_C_tongue')+'.tx', 'CTRL_expressions_tongueRight.input', f=True )
-'''
+
 def multipliersConnect():
     mySide = ['L','R']
     for i in mySide:
@@ -896,7 +1094,7 @@ def headShaderConnect():
     cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_neckStretch_L', 'shader_head_shader.maskWeight_79', f=True )
     cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_cm2_color_head_wm2_neckStretch_R', 'shader_head_shader.maskWeight_80', f=True )
     cmds.connectAttr ( newCon('FRM_WMmultipliers')+'.head_wm2_normal_head_wm2_neckStretch_R', 'shader_head_shader.maskWeight_81', f=True )
-'''
+
 def CTRL_expressionsMigration():
     # CTRL_expressions
     cmds.setAttr (oldCon('CTRL_expressions')+'.tx', k=True, lock=False)
@@ -925,29 +1123,12 @@ def CTRL_lookAtSwitch():
     cmds.parent('LOC_world', newCon('headGui_grp'))
     cmds.parent('headRigging_grp', newCon('headRig_grp'))
     cmds.parent('spine_04', world=True)
-    '''
-    # joint
-    myJoint = 'FACIAL_C_FacialRoot'
-    cmds.parent(myJoint, world=True)
 
-    myList = ['FACIAL_C_TeethUpper','FACIAL_C_LowerLipRotation','FACIAL_C_TeethLower','FACIAL_C_Tongue1','FACIAL_C_Tongue2','FACIAL_C_TongueUpper2','FACIAL_L_TongueSide2','FACIAL_R_TongueSide2','FACIAL_C_Tongue3','FACIAL_C_TongueUpper3','FACIAL_C_TongueLower3','FACIAL_L_TongueSide3','FACIAL_R_TongueSide3','FACIAL_C_Tongue4']
-    mySel = []
-    for i in cmds.listRelatives(myJoint, c=True):
-        if i not in myList:
-            # print(i)
-            # cmds.delete(i)
-            mySel.append(i)
-
-    cmds.select(mySel, r=True)
-    cmds.select('FACIAL_C_LipLowerSkin','FACIAL_L_LipLowerSkin','FACIAL_R_LipLowerSkin','FACIAL_L_LipLowerOuterSkin','FACIAL_R_LipLowerOuterSkin','FACIAL_C_12IPV_LipLowerSkin1','FACIAL_C_12IPV_LipLowerSkin2','FACIAL_L_12IPV_LipLowerSkin','FACIAL_R_12IPV_LipLowerSkin','FACIAL_L_12IPV_LipLowerOuterSkin1','FACIAL_R_12IPV_LipLowerOuterSkin1','FACIAL_L_12IPV_LipLowerOuterSkin2','FACIAL_R_12IPV_LipLowerOuterSkin2','FACIAL_L_12IPV_LipLowerOuterSkin3','FACIAL_R_12IPV_LipLowerOuterSkin3', 'FACIAL_L_12IPV_MouthInteriorLower1','FACIAL_R_12IPV_MouthInteriorLower1','FACIAL_L_12IPV_MouthInteriorLower2','FACIAL_R_12IPV_MouthInteriorLower2','FACIAL_C_MouthLower','head_grp', add=True)
-
-    myLoc = cmds.spaceLocator()
-    cmds.matchTransform(myLoc, 'FACIAL_C_FacialRoot')
-    '''
 def connectBlendShape2UI():
     eyeConnect()
     jawConnect()
     mouthConnect()
+    teethConnect()
     browConnect()
     cheekConnect()
     noseConnect()

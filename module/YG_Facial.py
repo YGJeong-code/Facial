@@ -1,10 +1,15 @@
-import maya.cmds as cmds
+from maya import cmds
+
 import Facial.module.YG_Facial_ARKit as ARKit
 import Facial.module.YG_Facial_ARKitDict as ARKitDict
 import Facial.module.YG_Facial_etc as etc
+
+import RBF.module.YG_RBF_poseDict as YG_RBF_poseDict
+
 from imp import reload
 reload(ARKit)
 reload(etc)
+reload(YG_RBF_poseDict)
 
 #class
 class YG_Facial(object):
@@ -45,28 +50,44 @@ class YG_Facial(object):
         self.targetFrame = cmds.frameLayout( label='Target', collapsable=True, collapse=False, bgc=self.myColor['orange'], cc=self.winResize, ec=self.winResize)
         cmds.columnLayout( adjustableColumn=1, p=self.targetFrame )
         cmds.textFieldButtonGrp('targetHeadAssign', label='Target Head : ', text='text', buttonLabel='Assign', editable=False, adjustableColumn=2, columnAlign=(1,'left'), columnWidth=(2,130), bc=lambda *_:self.assignBtn('targetHeadAssign') )
-        cmds.checkBox('combineHeadGrp', label='Combine Head Group', v=True )
+        # cmds.checkBox('combineHeadGrp', label='Combine Head Group', v=False )
         cmds.checkBox('deleteTargetCheck', label='Delete Target', v=True )
-
+        # cmds.checkBox('importUI', label='Import UI', v=False )
+        cmds.progressBar('progress_bar', maxValue=100)#, width=300)
         cmds.button(label='make ARKit target', w=self.size*2, c=self.makeARKitTargetBtn)
 
+        cmds.separator()
+        cmds.text(label='UI', align='left')
         # cmds.checkBox('shaderCheck', label='Shader Connect', v=True )
+        cmds.button(label='import UI', w=self.size*2, c=self.importUIBtn)
         cmds.button(label='connect UI', w=self.size*2, c=self.connectUIBtn)
 
-        cmds.button(label='delete MetaHuman', w=self.size*2, c=self.deleteMetaHumanBtn)
+        # cmds.button(label='delete MetaHuman', w=self.size*2, c=self.deleteMetaHumanBtn, en=False)
 
         cmds.separator()
+        cmds.text(label='Skin', align='left')
         cmds.button(label='skin transfer A to B', w=self.size*2, c=self.skinTransfer)
 
-        cmds.separator()
-        cmds.button(label='make keyframes ARKit list', w=self.size*2, c=self.makeKeyframsARKitList)
+        # cmds.separator()
+        # cmds.button(label='make keyframes ARKit list', w=self.size*2, c=self.makeKeyframsARKitList)
         # cmds.button(label='make expressions key', w=self.size*2, c=self.makeExpressionsKey)
 
         cmds.separator()
-        cmds.text(label='Face etc')
+        cmds.text(label='Face etc', align='left')
         cmds.textFieldButtonGrp('eyebrowsAssign', label='Eyebrows : ', text='text', buttonLabel='Assign', editable=False, adjustableColumn=2, columnAlign=(1,'left'), columnWidth=(2,130), bc=lambda *_:self.assignBtn('eyebrowsAssign') )
         cmds.textFieldButtonGrp('eyelashesAssign', label='Eyelashes : ', text='text', buttonLabel='Assign', editable=False, adjustableColumn=2, columnAlign=(1,'left'), columnWidth=(2,130), bc=lambda *_:self.assignBtn('eyelashesAssign') )
         cmds.button(label='make face etc rig', w=self.size*2, c=self.makeFaceEtcRig)
+
+        cmds.separator()
+        cmds.text(label='Body', align='left')
+        cmds.button(label='Tpose', w=self.size*2, c=self.makeTpose)
+        cmds.button(label='Apose', w=self.size*2, c=self.makeApose)
+
+        # cmds.separator()
+        # cmds.text(label='Face Replace', align='left')
+        # cmds.textFieldButtonGrp('fromFace', label='From : ', text='text', buttonLabel='Assign', editable=False, adjustableColumn=2, columnAlign=(1,'left'), columnWidth=(2,130), bc=lambda *_:self.assignBtn('fromFace') )
+        # cmds.textFieldButtonGrp('toFace', label='To : ', text='text', buttonLabel='Assign', editable=False, adjustableColumn=2, columnAlign=(1,'left'), columnWidth=(2,130), bc=lambda *_:self.assignBtn('toFace') )
+        # cmds.button(label='Face Replace', w=self.size*2, c=self.makeFaceReplace)
 
         cmds.setParent( '..' )
         cmds.setParent( '..' )
@@ -171,6 +192,8 @@ class YG_Facial(object):
     ############################################################################################################################################################################################################################
     def makeARKitTargetBtn(self, *args):
         ARKit.duplicateLODGroup()
+        #print('ARKit')
+        # self.progressBarBtn()
 
     def makePose(self, target):
         ARKit.makePose(target)
@@ -200,6 +223,9 @@ class YG_Facial(object):
 
         cmds.setAttr('Default.tx', 0)
         cmds.setAttr('CTRL_faceGUI.tx', 20)
+
+    def importUIBtn(self, *args):
+        ARKit.importUI()
 
     def connectUIBtn(self, *args):
         ARKit.connectBlendShape2UI()
@@ -271,6 +297,45 @@ class YG_Facial(object):
     def makeFaceEtcRig(self, *args):
         etc.createRivet2selVtx()
         etc.makeRivetJoint()
+
+    def makeTpose(self, *args):
+        myDrvList = YG_RBF_poseDict.myDrvList
+        myDrvListRotDic = YG_RBF_poseDict.myDrvListRotDic
+
+        for i in myDrvList:
+            rx = myDrvListRotDic[i][0]
+            ry = myDrvListRotDic[i][1]
+            rz = myDrvListRotDic[i][2]
+
+            cmds.setAttr(i+'.rx', rx)
+            cmds.setAttr(i+'.ry', ry)
+            cmds.setAttr(i+'.rz', rz)
+
+    def makeApose(self, *args):
+        myDrvList = YG_RBF_poseDict.myDrvList
+
+        for i in myDrvList:
+            cmds.setAttr(i+'.rx', 0)
+            cmds.setAttr(i+'.ry', 0)
+            cmds.setAttr(i+'.rz', 0)
+
+    def getBS(self, obj):
+        myBS = None
+        for i in cmds.listHistory(obj):
+            if cmds.nodeType(i) == 'blendShape':
+                myBS = i
+        return myBS
+
+    def makeFaceReplace(self, *args):
+        myBSList = ARKitDict.myBSList
+
+        fromFace = cmds.textFieldButtonGrp('fromFace', q=True, text=True )
+        toFace = cmds.textFieldButtonGrp('toFace', q=True, text=True )
+
+        for i in myBSList:
+            myInput = cmds.listConnections( self.getBS(fromFace)+'.'+i, s=True, p=True)[-1]
+            cmds.disconnectAttr (myInput, self.getBS(fromFace)+'.'+i)
+            cmds.connectAttr (myInput, self.getBS(toFace)+'.'+i, f=True)
 
     ############################################################################################################################################################################################################################
     # window resize
