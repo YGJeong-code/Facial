@@ -33,14 +33,14 @@ def progressBarBtn(myProgress):
 def duplicateLODGroup():
     progressBarBtn(0)
 
-    if cmds.checkBox('combineHeadGrp', q=True, v=True ):
-        # combine mesh
-        myList = cmds.listRelatives('head_lod0_grp', c=True)
-        myMesh = cmds.polyUniteSkinned( myList, ch=0 )
-        ARKitDict.myMesh = myMesh[0]
-    else:
+    # if cmds.checkBox('combineHeadGrp', q=True, v=True ):
+    #     # combine mesh
+    #     myList = cmds.listRelatives('head_lod0_grp', c=True)
+    #     myMesh = cmds.polyUniteSkinned( myList, ch=0 )
+    #     ARKitDict.myMesh = myMesh[0]
+    # else:
     # head only
-        ARKitDict.myMesh = cmds.textFieldButtonGrp('targetHeadAssign', q=True, text=True )
+    ARKitDict.myMesh = cmds.textFieldButtonGrp('targetHeadAssign', q=True, text=True )
 
     # target group
     ARKitDict.myTargetGrp = cmds.group(em=True, n='target_grp')
@@ -112,8 +112,8 @@ def duplicateLODGroup():
     cmds.setAttr ("Default.tx", -27)
 
     # connect blendShape 2 ui
-    if cmds.checkBox('importUI', q=True, v=True ):
-        importUI()
+    # if cmds.checkBox('importUI', q=True, v=True ):
+    #     importUI()
     # connectBlendShape2UI()
     progressBarBtn(16) #100
 
@@ -136,7 +136,7 @@ def oldCon(con):
     for i in cmds.ls(con):
         if '|headRig_grp' != find_top_level_parent(i) or '|rig' == find_top_level_parent(i):
             return i
-
+'''
 def defaultPoseNew():
     for item in ARKitDict.myNewDict:
         for con in ARKitDict.myNewDict[item]:
@@ -146,7 +146,7 @@ def defaultPoseNew():
                 cmds.setAttr(con+'.'+axis, 0)
                 cmds.setAttr(newCon('CTRL_C_eye')+'.tx', 0)
                 cmds.setAttr(newCon('CTRL_C_eye')+'.ty', 0)
-'''
+
 def defaultPose():
     for item in ARKitDict.myDict:
         for con in ARKitDict.myDict[item]:
@@ -185,7 +185,7 @@ def defaultPose():
                     cmds.setAttr(con+'.'+axis, 0)
     except:
         pass
-
+'''
 def makePoseNew(target):
     if target == 'Default':
         defaultPoseNew()
@@ -197,7 +197,7 @@ def makePoseNew(target):
                 value = ARKitDict.myNewDict[target][con][axis]
                 # cmds.setAttr(newCon(con)+'.'+axis, value)
                 cmds.setAttr(con+'.'+axis, value)
-'''
+
 def makePose(target):
     if target == 'Default':
         defaultPose()
@@ -418,10 +418,10 @@ def mouthConnect():
     cmds.connectAttr ( newCon('CTRL_C_jaw_ChinRaiseU')+'.ty', 'BS_ARKit.MouthShrugUpper', f=True )
 
     # CTRL_C_mouth
-    cmds.connectAttr ( newCon('CTRL_C_mouth')+'.ty', 'CTRL_expressions_mouthLeft.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth')+'.tx', 'CTRL_expressions_mouthLeft.input', f=True )
     cmds.connectAttr ( 'CTRL_expressions_mouthLeft.output', 'BS_ARKit.MouthLeft', f=True )
 
-    cmds.connectAttr ( newCon('CTRL_C_mouth')+'.ty', 'CTRL_expressions_mouthRight.input', f=True )
+    cmds.connectAttr ( newCon('CTRL_C_mouth')+'.tx', 'CTRL_expressions_mouthRight.input', f=True )
     cmds.connectAttr ( 'CTRL_expressions_mouthRight.output', 'BS_ARKit.MouthRight', f=True )
 
     # CTRL_L_mouth_upperLipRaise

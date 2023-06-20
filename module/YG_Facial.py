@@ -8,6 +8,7 @@ import RBF.module.YG_RBF_poseDict as YG_RBF_poseDict
 
 from imp import reload
 reload(ARKit)
+reload(ARKitDict)
 reload(etc)
 reload(YG_RBF_poseDict)
 

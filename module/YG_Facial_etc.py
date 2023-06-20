@@ -9,9 +9,9 @@ reload(ARKitDict)
 from Facial.module.YG_Facial_ARKit import (
     makeCorrectiveShape,
     makePose,
-    makePoseNew,
+    # makePoseNew,
     defaultPose,
-    defaultPoseNew,
+    # defaultPoseNew,
     oldCon,
     newCon,
 )

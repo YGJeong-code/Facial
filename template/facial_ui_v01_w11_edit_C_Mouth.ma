@@ -1,6 +1,6 @@
 //Maya ASCII 2022 scene
-//Name: facial_ui_v01.ma
-//Last modified: Thu, Jun 15, 2023 05:31:15 PM
+//Name: facial_ui_v01_w11_edit_C_Mouth.ma
+//Last modified: Thu, Jun 15, 2023 05:31:10 PM
 //Codeset: 949
 requires maya "2022";
 requires "stereoCamera" "10.0";
@@ -11,7 +11,7 @@ fileInfo "product" "Maya 2022";
 fileInfo "version" "2022";
 fileInfo "cutIdentifier" "202110272215-ad32f8f1e6";
 fileInfo "osv" "Windows 10 Enterprise v2009 (Build: 19045)";
-fileInfo "UUID" "3F59663C-4551-6D20-CA67-928B8E255342";
+fileInfo "UUID" "C1C27B7A-46C2-AD4C-9224-4C99ED481047";
 createNode transform -s -n "persp";
 	rename -uid "B76A7BDC-4A50-0D6C-F6ED-50BAAABD53F4";
 	setAttr ".v" no;
@@ -62127,4 +62127,4 @@ connectAttr "GUI2D_yellow_shader.msg" ":defaultShaderList1.s" -na;
 connectAttr "GUI2D_orange_shader.msg" ":defaultShaderList1.s" -na;
 connectAttr "defaultRenderLayer.msg" ":defaultRenderingList1.r" -na;
 dataStructure -fmt "raw" -as "name=idStructure:int32=ID";
-// End of facial_ui_v01.ma
+// End of facial_ui_v01_w11_edit_C_Mouth.ma
